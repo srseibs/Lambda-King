@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "208922202556",
+    "firebase_url": "https://lambdaking-35e88.firebaseio.com",
+    "project_id": "lambdaking-35e88",
+    "storage_bucket": "lambdaking-35e88.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:208922202556:android:12aa2b2588c9e664",
+        "android_client_info": {
+          "package_name": "com.sailinghawklabs.lambdaking"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "208922202556-86751lb62928tmq5tevqdmqkotlkas6u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sailinghawklabs.lambdaking",
+            "certificate_hash": "f907f38d4a502166733777e2a4d4cfb79a2273a9"
+          }
+        },
+        {
+          "client_id": "208922202556-mlh00obc9bvshjn06v2qq39cm0kl4bpp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQt8kZgQ9NnXgrBPSHUaaHaXWedRljKME"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "208922202556-mlh00obc9bvshjn06v2qq39cm0kl4bpp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
