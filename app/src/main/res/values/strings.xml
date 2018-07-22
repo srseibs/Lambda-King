@@ -1,4 +1,25 @@
 <resources>
     <string name="app_name">Lambda King</string>
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+
+
+    <string-array name="freq_units">
+        <item>GHz</item>
+        <item>MHz</item>
+        <item>kHz</item>
+        <item>Hz</item>
+    </string-array>
+
+    <string-array name="length_units">
+        <item>km</item>
+        <item>m</item>
+        <item>cm</item>
+        <item>mm</item>
+        <item>um</item>
+        <item>in</item>
+        <item>mil</item>
+        <item>ft</item>
+        <item>yd</item>
+        <item>mi</item>
+    </string-array>
 </resources>

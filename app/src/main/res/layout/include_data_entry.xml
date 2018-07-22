@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:cardCornerRadius="4dp"
+        app:cardElevation="6dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Enter values"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:id="@+id/main_tv_freqLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="16dp"
+                android:text="Frequency"
+                app:layout_constraintBottom_toBottomOf="@+id/main_et_freq"
+                app:layout_constraintEnd_toStartOf="@+id/guidelineL"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/main_et_freq"/>
+
+            <EditText
+                android:id="@+id/main_et_freq"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+
+                android:layout_marginTop="8dp"
+
+                android:hint="Frequency"
+                android:imeOptions="actionDone"
+                android:inputType="numberDecimal"
+                android:text="12.45"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toStartOf="@+id/guideline_R"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/guidelineL"
+                app:layout_constraintTop_toBottomOf="@+id/textView3"
+                tools:text="12.45"/>
+
+            <Spinner
+                android:id="@+id/freq_units_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+
+                android:background="@android:drawable/editbox_background"
+
+                android:drawSelectorOnTop="true"
+                android:entries="@array/freq_units"
+                android:theme="@style/ItemTextAppearance"
+                app:layout_constraintBaseline_toBaselineOf="@+id/main_et_freq"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guideline_R"/>
+
+            <TextView
+                android:id="@+id/main_tv_cableLength"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="Cable\nLength"
+                android:textAlignment="center"
+                app:layout_constraintBottom_toBottomOf="@+id/main_et_length"
+                app:layout_constraintEnd_toStartOf="@+id/guidelineL"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/main_et_length"/>
+
+            <EditText
+                android:id="@+id/main_et_length"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:ems="10"
+                android:imeOptions="actionDone"
+                android:inputType="numberDecimal"
+                android:minEms="3"
+                android:text="12.4"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toStartOf="@+id/guideline_R"
+                app:layout_constraintStart_toStartOf="@+id/guidelineL"
+                app:layout_constraintTop_toBottomOf="@+id/main_et_freq"/>
+
+            <Spinner
+                android:id="@+id/length_unit_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/editbox_background"
+
+                android:layout_marginEnd="8dp"
+                android:entries="@array/length_units"
+                android:theme="@style/ItemTextAppearance"
+                app:layout_constraintBaseline_toBaselineOf="@+id/main_et_length"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guideline_R"/>
+
+            <TextView
+                android:id="@+id/main_tv_vfLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Velocity\nFactor (Vf)"
+                android:textAlignment="center"
+                app:layout_constraintBottom_toBottomOf="@+id/main_et_vf"
+                app:layout_constraintEnd_toStartOf="@+id/guidelineL"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/main_et_vf"/>
+
+            <EditText
+                android:id="@+id/main_et_vf"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:ems="5"
+                android:imeOptions="actionDone"
+                android:inputType="numberDecimal"
+                android:text="0.74"
+                android:textAlignment="center"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/guideline_R"
+                app:layout_constraintStart_toStartOf="@+id/guidelineL"
+                app:layout_constraintTop_toBottomOf="@+id/main_et_length"/>
+
+            <android.support.constraint.Guideline
+                android:id="@+id/guidelineL"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.28"/>
+
+            <android.support.constraint.Guideline
+                android:id="@+id/guideline_R"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.82"/>
+
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>
