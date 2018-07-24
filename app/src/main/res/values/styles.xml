@@ -29,4 +29,26 @@
        <!--<item name="android:textStyle">normal</item>-->
     </style>
 
+    <style name="ResultTableRowTitle" parent="AppTheme">
+        <item name="android:textSize">10sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingEnd">8dp</item>
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:paddingBottom">8dp</item>
+    </style>
+
+    <style name="ResultTableResults" parent="AppTheme">
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingEnd">8dp</item>
+    </style>
+
+    <style name="ResultTableVerticalLine">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:layout_height">2px</item>
+        <item name="android:background">@color/colorAccent</item>
+    </style>
+
 </resources>

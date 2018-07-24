@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:orientation="vertical"
+             android:layout_marginStart="8dp"
+             android:layout_marginEnd="8dp"
+             android:showDividers="beginning|middle|end"
+             android:stretchColumns="1,2">
+
+    <TableRow>
+
+        <TextView
+            style="@style/ResultTableRowTitle"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:text="Phase Shift"
+            />
+
+        <TextView
+            android:id="@+id/result_phase_shift_deg"
+            style="@style/ResultTableResults"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:text="124.23 deg"
+            />
+    </TableRow>
+
+    <View style="@style/ResultTableVerticalLine" />
+
+    <TableRow>
+
+        <TextView
+            style="@style/ResultTableRowTitle"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:text="Delay"
+            />
+
+        <TextView
+            android:id="@+id/result_delay"
+            style="@style/ResultTableResults"
+            android:layout_height="wrap_content"
+            android:text="445.2 ns"
+            />
+    </TableRow>
+
+    <View style="@style/ResultTableVerticalLine" />
+
+    <TableRow>
+
+        <TextView
+            style="@style/ResultTableRowTitle"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:text="Wavelength"
+            />
+
+        <TextView
+            android:id="@+id/result_lambda_m"
+            style="@style/ResultTableResults"
+            android:layout_height="wrap_content"
+            android:text="12.4 m"
+            />
+
+        <TextView
+            android:id="@+id/result_lambda_ft"
+            style="@style/ResultTableResults"
+            android:layout_height="wrap_content"
+            android:text="37.345 ft"
+            />
+    </TableRow>
+
+    <View style="@style/ResultTableVerticalLine" />
+
+    <TableRow>
+
+        <TextView
+            style="@style/ResultTableRowTitle"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:text="Wavelength / 2"
+            />
+
+        <TextView
+            android:id="@+id/result_lambda_2_m"
+            style="@style/ResultTableResults"
+            android:layout_height="wrap_content"
+            android:text="6.2 m"
+            />
+
+        <TextView
+            android:id="@+id/result_lambda_2_ft"
+            style="@style/ResultTableResults"
+            android:layout_height="wrap_content"
+            android:text="15.345 ft"
+            />
+    </TableRow>
+
+    <View style="@style/ResultTableVerticalLine" />
+
+    <TableRow>
+
+        <TextView
+            style="@style/ResultTableRowTitle"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:text="Wavelength / 4"
+            />
+
+        <TextView
+            android:id="@+id/result_lambda_4_m"
+            style="@style/ResultTableResults"
+            android:layout_height="wrap_content"
+            android:text="1.3 m"
+            />
+
+        <TextView
+            android:id="@+id/result_lambda_4_ft"
+            style="@style/ResultTableResults"
+            android:layout_height="wrap_content"
+            android:text="3.12 ft"
+            />
+    </TableRow>
+
+    <View style="@style/ResultTableVerticalLine" />
+
+    <TableRow>
+
+        <TextView
+            style="@style/ResultTableRowTitle"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:text="Phase Slopes"
+            />
+
+        <TextView
+            android:id="@+id/result_slope_m_deg"
+            style="@style/ResultTableResults"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:text="1.3 m/deg"
+            />
+
+        <TextView
+            android:id="@+id/result_slope_ft_deg"
+            style="@style/ResultTableResults"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:text="0.24 in/deg"
+            />
+    </TableRow>
+
+    <View style="@style/ResultTableVerticalLine" />
+
+    <TableRow>
+        <TextView
+            android:id="@+id/result_slope_deg_m"
+            style="@style/ResultTableResults"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:text="1.3 deg/mm"
+            />
+
+        <TextView
+            android:id="@+id/result_slope_deg_in"
+            style="@style/ResultTableResults"
+            android:layout_height="wrap_content"
+            android:text="0.24 deg/in"
+            />
+    </TableRow>
+
+    <View style="@style/ResultTableVerticalLine" />
+
+    <TableRow>
+        <TextView
+            style="@style/ResultTableRowTitle"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:text="Epsilon"
+            />
+
+        <TextView
+            android:id="@+id/result_epsilon"
+            style="@style/ResultTableResults"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:text="1.245"
+            />
+    </TableRow>
+
+
+</TableLayout>
