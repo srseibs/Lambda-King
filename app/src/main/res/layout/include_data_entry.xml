@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         app:cardCornerRadius="4dp"
-        app:cardElevation="6dp"
+        app:cardElevation="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,6 +40,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
+                style="@style/ValueTextLabels"
                 android:text="Frequency"
                 app:layout_constraintBottom_toBottomOf="@+id/main_et_freq"
                 app:layout_constraintEnd_toStartOf="@+id/guidelineL"
@@ -47,23 +48,22 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/main_et_freq"/>
 
-            <EditText
+            <com.sailinghawklabs.lambdaking.EditTextWithClear
                 android:id="@+id/main_et_freq"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
-
                 android:hint="Frequency"
                 android:imeOptions="actionDone"
                 android:inputType="numberDecimal"
-                android:text="12.45"
+                android:text="300"
                 android:textAlignment="center"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_R"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/guidelineL"
                 app:layout_constraintTop_toBottomOf="@+id/textView3"
-                tools:text="12.45"/>
+                />
 
             <Spinner
                 android:id="@+id/freq_units_spinner"
@@ -74,11 +74,11 @@
                 android:background="@android:drawable/editbox_background"
 
                 android:drawSelectorOnTop="true"
-                android:entries="@array/freq_units"
                 android:theme="@style/ItemTextAppearance"
                 app:layout_constraintBaseline_toBaselineOf="@+id/main_et_freq"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/guideline_R"/>
+                app:layout_constraintStart_toStartOf="@+id/guideline_R"
+                tools:entries="@array/freq_units"/>
 
             <TextView
                 android:id="@+id/main_tv_cableLength"
@@ -88,6 +88,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
+                style="@style/ValueTextLabels"
                 android:text="Cable\nLength"
                 android:textAlignment="center"
                 app:layout_constraintBottom_toBottomOf="@+id/main_et_length"
@@ -96,18 +97,18 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/main_et_length"/>
 
-            <EditText
+            <com.sailinghawklabs.lambdaking.EditTextWithClear
                 android:id="@+id/main_et_length"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:ems="10"
-
+                android:hint="Cable length"
                 android:imeOptions="actionDone"
                 android:inputType="numberDecimal"
                 android:minEms="3"
-                android:text="12.4"
+                android:text="1"
                 android:textAlignment="center"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_R"
                 app:layout_constraintStart_toStartOf="@+id/guidelineL"
@@ -120,11 +121,11 @@
                 android:layout_marginEnd="8dp"
 
                 android:background="@android:drawable/editbox_background"
-                android:entries="@array/length_units"
                 android:theme="@style/ItemTextAppearance"
                 app:layout_constraintBaseline_toBaselineOf="@+id/main_et_length"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/guideline_R"/>
+                app:layout_constraintStart_toStartOf="@+id/guideline_R"
+                tools:entries="@array/length_units"/>
 
             <TextView
                 android:id="@+id/main_tv_vfLabel"
@@ -134,6 +135,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
+                style="@style/ValueTextLabels"
                 android:text="Velocity\nFactor (Vf)"
                 android:textAlignment="center"
                 app:layout_constraintBottom_toBottomOf="@+id/main_et_vf"
@@ -142,19 +144,19 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/main_et_vf"/>
 
-            <EditText
+            <com.sailinghawklabs.lambdaking.EditTextWithClear
                 android:id="@+id/main_et_vf"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
-
                 android:ems="5"
+                android:hint="Velocity Factor"
 
                 android:imeOptions="actionDone"
                 android:inputType="numberDecimal"
-                android:text="0.74"
+                android:text="1.0"
                 android:textAlignment="center"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_R"

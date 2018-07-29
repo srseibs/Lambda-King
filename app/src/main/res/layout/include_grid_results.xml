@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              android:orientation="vertical"
@@ -48,7 +49,25 @@
     <View style="@style/ResultTableVerticalLine" />
 
     <TableRow>
+        <TextView
+            style="@style/ResultTableRowTitle"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:text="Electrical Length"
+            />
 
+        <TextView
+            android:id="@+id/result_elen"
+            style="@style/ResultTableResults"
+            android:layout_height="wrap_content"
+            android:text="1.54 Lambda"
+            />
+
+
+    </TableRow>
+    <View style="@style/ResultTableVerticalLine" />
+
+    <TableRow>
         <TextView
             style="@style/ResultTableRowTitle"
             android:layout_height="wrap_content"
@@ -60,7 +79,7 @@
             android:id="@+id/result_lambda_m"
             style="@style/ResultTableResults"
             android:layout_height="wrap_content"
-            android:text="12.4 m"
+            android:text="12.4 λ"
             />
 
         <TextView
@@ -154,6 +173,7 @@
     <View style="@style/ResultTableVerticalLine" />
 
     <TableRow>
+
         <TextView
             android:id="@+id/result_slope_deg_m"
             style="@style/ResultTableResults"
@@ -167,6 +187,26 @@
             style="@style/ResultTableResults"
             android:layout_height="wrap_content"
             android:text="0.24 deg/in"
+            />
+    </TableRow>
+
+    <View style="@style/ResultTableVerticalLine" />
+
+
+    <TableRow>
+        <TextView
+            android:id="@+id/result_slope_deg_hz"
+            style="@style/ResultTableResults"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:text="1.3 deg/MHz"
+            />
+
+        <TextView
+            android:id="@+id/result_slope_hz_deg"
+            style="@style/ResultTableResults"
+            android:layout_height="wrap_content"
+            android:text="0.24 MHz/deg"
             />
     </TableRow>
 
