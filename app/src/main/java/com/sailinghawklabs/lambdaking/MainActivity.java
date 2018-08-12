@@ -1,10 +1,17 @@
 package com.sailinghawklabs.lambdaking;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -54,6 +61,9 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.result_slope_hz_deg) TextView tv_result_slope_hz_deg;
     @BindView(R.id.result_epsilon) TextView tv_result_epsilon;
 
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+
     private AdView mAdView;
 
     LinkedHashMap<Double, String> freqUnits;
@@ -66,17 +76,23 @@ public class MainActivity extends AppCompatActivity {
     double cableLength_m;
     double velocityFactor;
 
-    AutoRanger mAutoRanger;
-    final int DEFAULT_NUM_DIGITS = 2;
+    int mNumDigits;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate: entered");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
+        loadPreferences();
 
-        mAutoRanger = new AutoRanger(DEFAULT_NUM_DIGITS);
+        setSupportActionBar(mToolbar);
+        ActionBar ab = getSupportActionBar();
+        if (ab != null) {
+            ab.setTitle(getString(R.string.app_name));
+        }
+
 
         populateFreqUnits();
         populateLengthUnits();
@@ -211,6 +227,10 @@ public class MainActivity extends AppCompatActivity {
         if (! readEditTexts())
             return;
 
+
+        AutoRanger autoRanger = new AutoRanger(mNumDigits);
+
+
         // auto-units: *s, *m, ft|in|mi|mil|yd,
 
         // (1) Velocity = F * Lambda  [m/s]
@@ -232,50 +252,50 @@ public class MainActivity extends AppCompatActivity {
         Double epsilon_r = 1 / (velocityFactor * velocityFactor);
 
 
-        tv_result_phase_shift_deg.setText(mAutoRanger.rangePhase(phaseShift_deg).toEngineeringString());
-        tv_result_delay_s.setText(mAutoRanger.rangeTime(delay_s).toEngineeringString());
-        tv_result_elen.setText(mAutoRanger.rangeWavelengths(num_wavelens).toEngineeringString());
+        tv_result_phase_shift_deg.setText(autoRanger.rangePhase(phaseShift_deg).toEngineeringString());
+        tv_result_delay_s.setText(autoRanger.rangeTime(delay_s).toEngineeringString());
+        tv_result_elen.setText(autoRanger.rangeWavelengths(num_wavelens).toEngineeringString());
 
 
         // speed --------------------------------------------------------------------
-        EngineeringNotationTools.MantissaExponent encoded_speed_m_s = EngineeringNotationTools.encodeMantissa(velocity_m_s, DEFAULT_NUM_DIGITS);
+        EngineeringNotationTools.MantissaExponent encoded_speed_m_s = EngineeringNotationTools.encodeMantissa(velocity_m_s, mNumDigits);
         String result = encoded_speed_m_s.mantissaString + " " + encoded_speed_m_s.exponentString + "m/s";
 
         tv_result_speed_m_s.setText(result);
-        tv_result_speed_mi_s.setText(String.format(Locale.US, "%." + DEFAULT_NUM_DIGITS + "f mi/s", velocity_mi_s));
+        tv_result_speed_mi_s.setText(String.format(Locale.US, "%." + mNumDigits + "f mi/s", velocity_mi_s));
 
 
         // lamdas -------------------------------------------------------------
-        tv_result_lambda_m.setText(mAutoRanger.rangeLength(lambda_m).toEngineeringString());
-        tv_result_lambda_ft.setText(mAutoRanger.rangeLengthImperial(lambda_m).toEngineeringString());
+        tv_result_lambda_m.setText(autoRanger.rangeLength(lambda_m).toEngineeringString());
+        tv_result_lambda_ft.setText(autoRanger.rangeLengthImperial(lambda_m).toEngineeringString());
 
-        tv_result_lambda_2_m.setText(mAutoRanger.rangeLength(lambda_m/2).toEngineeringString());
-        tv_result_lambda_2_ft.setText(mAutoRanger.rangeLengthImperial(lambda_m/2).toEngineeringString());
-        tv_result_lambda_4_m.setText(mAutoRanger.rangeLength(lambda_m/4).toEngineeringString());
-        tv_result_lambda_4_ft.setText(mAutoRanger.rangeLengthImperial(lambda_m/4).toEngineeringString());
+        tv_result_lambda_2_m.setText(autoRanger.rangeLength(lambda_m/2).toEngineeringString());
+        tv_result_lambda_2_ft.setText(autoRanger.rangeLengthImperial(lambda_m/2).toEngineeringString());
+        tv_result_lambda_4_m.setText(autoRanger.rangeLength(lambda_m/4).toEngineeringString());
+        tv_result_lambda_4_ft.setText(autoRanger.rangeLengthImperial(lambda_m/4).toEngineeringString());
 
         // phase slopes --------------------------------------------------
-        tv_result_slope_m_deg.setText(mAutoRanger.rangeLength(phase_slope_m_deg).toEngineeringString()+"/deg");
-        tv_result_slope_ft_deg.setText(mAutoRanger.rangeLengthImperial(phase_slope_m_deg).toEngineeringString()+"/deg");
+        tv_result_slope_m_deg.setText(autoRanger.rangeLength(phase_slope_m_deg).toEngineeringString()+"/deg");
+        tv_result_slope_ft_deg.setText(autoRanger.rangeLengthImperial(phase_slope_m_deg).toEngineeringString()+"/deg");
 
-        EngineeringNotationTools.MantissaExponent encodedSlope_deg_m = EngineeringNotationTools.encodeMantissa(1/phase_slope_m_deg, DEFAULT_NUM_DIGITS);
+        EngineeringNotationTools.MantissaExponent encodedSlope_deg_m = EngineeringNotationTools.encodeMantissa(1/phase_slope_m_deg, mNumDigits);
         result = encodedSlope_deg_m.mantissaString + " " + encodedSlope_deg_m.exponentString + "deg/m";
         tv_result_slope_deg_m.setText(result);
 
-        EngineeringNotationTools.MantissaExponent encodedSlope_deg_ft = EngineeringNotationTools.encodeMantissa(1/phase_slope_ft_deg, DEFAULT_NUM_DIGITS);
+        EngineeringNotationTools.MantissaExponent encodedSlope_deg_ft = EngineeringNotationTools.encodeMantissa(1/phase_slope_ft_deg, mNumDigits);
         result = encodedSlope_deg_ft.mantissaString + " " + encodedSlope_deg_ft.exponentString + "deg/ft";
         tv_result_slope_deg_ft.setText(result);
 
-        EngineeringNotationTools.MantissaExponent encodedSlope_deg_hz = EngineeringNotationTools.encodeMantissa(phase_slope_deg_hz, DEFAULT_NUM_DIGITS);
+        EngineeringNotationTools.MantissaExponent encodedSlope_deg_hz = EngineeringNotationTools.encodeMantissa(phase_slope_deg_hz, mNumDigits);
         result = encodedSlope_deg_hz.mantissaString + " " + encodedSlope_deg_hz.exponentString + "deg/Hz";
         tv_result_slope_deg_hz.setText(result);
 
-        EngineeringNotationTools.MantissaExponent encodedSlope_hz_deg = EngineeringNotationTools.encodeMantissa(1/ phase_slope_deg_hz, DEFAULT_NUM_DIGITS);
+        EngineeringNotationTools.MantissaExponent encodedSlope_hz_deg = EngineeringNotationTools.encodeMantissa(1/ phase_slope_deg_hz, mNumDigits);
         result = encodedSlope_hz_deg.mantissaString + " " + encodedSlope_hz_deg.exponentString + "Hz/deg";
         tv_result_slope_hz_deg.setText(result);
 
         // epsilon ------------------------------------------------------------------
-        tv_result_epsilon.setText(String.format(Locale.US, "%." + DEFAULT_NUM_DIGITS + "f (relative)", epsilon_r));
+        tv_result_epsilon.setText(String.format(Locale.US, "%." + mNumDigits + "f (relative)", epsilon_r));
 
     }
 
@@ -328,4 +348,44 @@ public class MainActivity extends AppCompatActivity {
         ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        Log.d(TAG, "onCreateOptionsMenu: menu = " + menu.toString());
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d(TAG, "onOptionsItemSelected: item = " + item.getTitle().toString());
+
+        switch (item.getItemId()) {
+            case R.id.mn_main_settings:
+                startActivity(new Intent(MainActivity.this, SettingsPrefActivity.class));
+                return true;
+
+            case R.id.mn_main_help:
+                // startActivity(new Intent(MainActivity.this, HelpActivity.class));
+                return true;
+
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void loadPreferences() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String numDigitsString = prefs.getString(getString(R.string.pref_key_digits), getString(R.string.pref_def_digits));
+        mNumDigits = Integer.parseInt(numDigitsString);
+        Log.d(TAG, "loadPreferences: nNumDigits set to : " + mNumDigits);
+    }
+
+    @Override
+    protected void onResume() {
+        Log.d(TAG, "onResume: entered");
+        loadPreferences();
+        calculateResults();
+        super.onResume();
+    }
 }
