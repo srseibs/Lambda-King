@@ -68,6 +68,33 @@
     <View style="@style/ResultTableVerticalLine" />
 
     <TableRow>
+
+        <TextView
+            style="@style/ResultTableRowTitle"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:text="Speed"
+            />
+
+        <TextView
+            android:id="@+id/result_speed_m_s"
+            style="@style/ResultTableResults"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:text="300.12 Mm/s"
+            />
+
+        <TextView
+            android:id="@+id/result_speed_mi_s"
+            style="@style/ResultTableResults"
+            android:layout_height="wrap_content"
+            android:text="9100 mi/s"
+            />
+    </TableRow>
+
+    <View style="@style/ResultTableVerticalLine" />
+
+    <TableRow>
         <TextView
             style="@style/ResultTableRowTitle"
             android:layout_height="wrap_content"

@@ -37,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.result_phase_shift_deg) TextView tv_result_phase_shift_deg;
     @BindView(R.id.result_delay) TextView tv_result_delay_s;
     @BindView(R.id.result_elen) TextView tv_result_elen;
+    @BindView(R.id.result_speed_m_s) TextView tv_result_speed_m_s;
+    @BindView(R.id.result_speed_mi_s) TextView tv_result_speed_mi_s;
+
     @BindView(R.id.result_lambda_m) TextView tv_result_lambda_m;
     @BindView(R.id.result_lambda_ft) TextView tv_result_lambda_ft;
     @BindView(R.id.result_lambda_2_m) TextView tv_result_lambda_2_m;
@@ -64,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     double velocityFactor;
 
     AutoRanger mAutoRanger;
-    final int DEFAULT_NUM_DIGITS = 4;
+    final int DEFAULT_NUM_DIGITS = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -217,10 +220,11 @@ public class MainActivity extends AppCompatActivity {
         // (5) PhaseShift = 360 * CableLength / Lambda  [m]
 
         // calculate some basic intermediate results
-        Double velocity_ms = PhysicalConstants.SPEED_OF_LIGHT_mps * velocityFactor;
-        Double lambda_m = velocity_ms / frequency_Hz;
+        Double velocity_m_s = PhysicalConstants.SPEED_OF_LIGHT_mps * velocityFactor;
+        Double velocity_mi_s = velocity_m_s /  (PhysicalConstants.FEET_PER_MILE_ft * PhysicalConstants.FEET_PER_METER_ft);
+        Double lambda_m = velocity_m_s / frequency_Hz;
         Double phaseShift_deg = 360.0 * cableLength_m / lambda_m ;
-        Double delay_s = cableLength_m / velocity_ms;
+        Double delay_s = cableLength_m / velocity_m_s;
         Double num_wavelens = cableLength_m / lambda_m;
         Double phase_slope_m_deg = cableLength_m / phaseShift_deg;
         Double phase_slope_ft_deg = phase_slope_m_deg * PhysicalConstants.FEET_PER_METER_ft;
@@ -231,22 +235,31 @@ public class MainActivity extends AppCompatActivity {
         tv_result_phase_shift_deg.setText(mAutoRanger.rangePhase(phaseShift_deg).toEngineeringString());
         tv_result_delay_s.setText(mAutoRanger.rangeTime(delay_s).toEngineeringString());
         tv_result_elen.setText(mAutoRanger.rangeWavelengths(num_wavelens).toEngineeringString());
+
+
+        // speed --------------------------------------------------------------------
+        EngineeringNotationTools.MantissaExponent encoded_speed_m_s = EngineeringNotationTools.encodeMantissa(velocity_m_s, DEFAULT_NUM_DIGITS);
+        String result = encoded_speed_m_s.mantissaString + " " + encoded_speed_m_s.exponentString + "m/s";
+
+        tv_result_speed_m_s.setText(result);
+        tv_result_speed_mi_s.setText(String.format(Locale.US, "%." + DEFAULT_NUM_DIGITS + "f mi/s", velocity_mi_s));
+
+
+        // lamdas -------------------------------------------------------------
         tv_result_lambda_m.setText(mAutoRanger.rangeLength(lambda_m).toEngineeringString());
         tv_result_lambda_ft.setText(mAutoRanger.rangeLengthImperial(lambda_m).toEngineeringString());
+
         tv_result_lambda_2_m.setText(mAutoRanger.rangeLength(lambda_m/2).toEngineeringString());
         tv_result_lambda_2_ft.setText(mAutoRanger.rangeLengthImperial(lambda_m/2).toEngineeringString());
         tv_result_lambda_4_m.setText(mAutoRanger.rangeLength(lambda_m/4).toEngineeringString());
         tv_result_lambda_4_ft.setText(mAutoRanger.rangeLengthImperial(lambda_m/4).toEngineeringString());
 
-
-
-
-
+        // phase slopes --------------------------------------------------
         tv_result_slope_m_deg.setText(mAutoRanger.rangeLength(phase_slope_m_deg).toEngineeringString()+"/deg");
         tv_result_slope_ft_deg.setText(mAutoRanger.rangeLengthImperial(phase_slope_m_deg).toEngineeringString()+"/deg");
 
         EngineeringNotationTools.MantissaExponent encodedSlope_deg_m = EngineeringNotationTools.encodeMantissa(1/phase_slope_m_deg, DEFAULT_NUM_DIGITS);
-        String result = encodedSlope_deg_m.mantissaString + " " + encodedSlope_deg_m.exponentString + "deg/m";
+        result = encodedSlope_deg_m.mantissaString + " " + encodedSlope_deg_m.exponentString + "deg/m";
         tv_result_slope_deg_m.setText(result);
 
         EngineeringNotationTools.MantissaExponent encodedSlope_deg_ft = EngineeringNotationTools.encodeMantissa(1/phase_slope_ft_deg, DEFAULT_NUM_DIGITS);
@@ -258,10 +271,11 @@ public class MainActivity extends AppCompatActivity {
         tv_result_slope_deg_hz.setText(result);
 
         EngineeringNotationTools.MantissaExponent encodedSlope_hz_deg = EngineeringNotationTools.encodeMantissa(1/ phase_slope_deg_hz, DEFAULT_NUM_DIGITS);
-        result = encodedSlope_hz_deg.mantissaString + " " + encodedSlope_deg_hz.exponentString + "Hz/deg";
+        result = encodedSlope_hz_deg.mantissaString + " " + encodedSlope_hz_deg.exponentString + "Hz/deg";
         tv_result_slope_hz_deg.setText(result);
 
-        tv_result_epsilon.setText(String.format(Locale.US, "%.4f", epsilon_r));
+        // epsilon ------------------------------------------------------------------
+        tv_result_epsilon.setText(String.format(Locale.US, "%." + DEFAULT_NUM_DIGITS + "f (relative)", epsilon_r));
 
     }
 
