@@ -1,28 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="pref_settings_title_text">Settings from Strings</string>
-    <!--<string name="pref_header_about">About</string>-->
-    <!--<string name="app_version_string">@string/app_version</string>-->
-    <!---->
-    <!---->
-    <!--<string name="title_version">Version</string>-->
-    <!--<string name="key_send_feedback">key_send_feedback</string>-->
-    <!---->
+    <string name="pref_settings_title_text">Settings</string>
 
+    <string-array name="decimal_choice_entries">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
 
-
-    <!-- Time Presets -->
     <string name="pref_title_digits">Number of Decimal Places </string>
     <string name="pref_key_digits">pref_key_digits</string>
-    <string name="pref_def_digits">4</string>
+    <string name="pref_def_digits">2</string>
 
-
-    <string name="pref_title_settings_link">Notification Settings in Your Phone</string>
-    <string name="pref_key_settings_link">pref_key_app_settings</string>
-    <string name="pref_app_settings_summary">
-        For releases since Oreo, Android configures notification preferences in the Android Settings
-        menu for each app. Select this message to
-        go to the Setting for this app. From the \'Notifications\' menu, you can configure
-        many of the features here. Click anywhere on this message to go to Settings.
-    </string>
 </resources>

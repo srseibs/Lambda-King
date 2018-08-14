@@ -1,5 +1,6 @@
 package com.sailinghawklabs.lambdaking;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,6 +24,8 @@ import android.widget.TextView;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.sailinghawklabs.engineeringnotation.EngineeringNotationTools;
+import com.sailinghawklabs.lambdaking.preferences.SettingsPrefActivity;
+import com.sailinghawklabs.lambdaking.tlines.SelectTlineActivity;
 
 import java.util.LinkedHashMap;
 import java.util.Locale;
@@ -30,9 +33,12 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 public class MainActivity extends AppCompatActivity {
+    public static int RESULT_CODE_TLINE_VF = 123;
+
     private static final String TAG = MainActivity.class.getSimpleName();
 
     @BindView(R.id.main_et_freq) EditTextWithClear mFreq_et;
@@ -44,8 +50,12 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.result_phase_shift_deg) TextView tv_result_phase_shift_deg;
     @BindView(R.id.result_delay) TextView tv_result_delay_s;
     @BindView(R.id.result_elen) TextView tv_result_elen;
+    @BindView(R.id.result_epsilon) TextView tv_result_epsilon;
+
     @BindView(R.id.result_speed_m_s) TextView tv_result_speed_m_s;
     @BindView(R.id.result_speed_mi_s) TextView tv_result_speed_mi_s;
+    @BindView(R.id.result_speed_s_m) TextView tv_result_speed_s_m;
+    @BindView(R.id.result_speed_s_mi) TextView tv_result_speed_s_in;
 
     @BindView(R.id.result_lambda_m) TextView tv_result_lambda_m;
     @BindView(R.id.result_lambda_ft) TextView tv_result_lambda_ft;
@@ -59,7 +69,8 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.result_slope_deg_in) TextView tv_result_slope_deg_ft;
     @BindView(R.id.result_slope_deg_hz) TextView tv_result_slope_deg_hz;
     @BindView(R.id.result_slope_hz_deg) TextView tv_result_slope_hz_deg;
-    @BindView(R.id.result_epsilon) TextView tv_result_epsilon;
+
+    @BindView(R.id.main_tl_list) TextView tv_tranLine_list_button;
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -93,13 +104,11 @@ public class MainActivity extends AppCompatActivity {
             ab.setTitle(getString(R.string.app_name));
         }
 
+        Double value1 = Double.parseDouble("77.00");
+        Double value2 = Double.parseDouble(" 77");
 
         populateFreqUnits();
         populateLengthUnits();
-
-        String temp = "hello";
-
-        tv_result_phase_shift_deg.setText(temp);
 
         mAdView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
@@ -140,6 +149,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    @OnClick(R.id.main_tl_list)
+    void callTransmissionLinePicker() {
+        Intent intent = new Intent(this, SelectTlineActivity.class);
+        startActivityForResult(intent, RESULT_CODE_TLINE_VF);
+    }
+
 
     private void populateFreqUnits() {
         freqUnits = new LinkedHashMap<Double, String>();
@@ -242,6 +258,8 @@ public class MainActivity extends AppCompatActivity {
         // calculate some basic intermediate results
         Double velocity_m_s = PhysicalConstants.SPEED_OF_LIGHT_mps * velocityFactor;
         Double velocity_mi_s = velocity_m_s /  (PhysicalConstants.FEET_PER_MILE_ft * PhysicalConstants.FEET_PER_METER_ft);
+        Double velocity_s_m = 1/velocity_m_s;
+        Double velocity_s_in =  velocity_s_m / (12 * PhysicalConstants.FEET_PER_METER_ft);
         Double lambda_m = velocity_m_s / frequency_Hz;
         Double phaseShift_deg = 360.0 * cableLength_m / lambda_m ;
         Double delay_s = cableLength_m / velocity_m_s;
@@ -260,9 +278,19 @@ public class MainActivity extends AppCompatActivity {
         // speed --------------------------------------------------------------------
         EngineeringNotationTools.MantissaExponent encoded_speed_m_s = EngineeringNotationTools.encodeMantissa(velocity_m_s, mNumDigits);
         String result = encoded_speed_m_s.mantissaString + " " + encoded_speed_m_s.exponentString + "m/s";
-
         tv_result_speed_m_s.setText(result);
-        tv_result_speed_mi_s.setText(String.format(Locale.US, "%." + mNumDigits + "f mi/s", velocity_mi_s));
+
+        EngineeringNotationTools.MantissaExponent encoded_speed_mi_s = EngineeringNotationTools.encodeMantissa(velocity_mi_s, mNumDigits);
+        result = encoded_speed_mi_s.mantissaString + " " + encoded_speed_m_s.exponentString + "mi/s";
+        tv_result_speed_mi_s.setText(result);
+
+        EngineeringNotationTools.MantissaExponent encoded_speed_s_m = EngineeringNotationTools.encodeMantissa(velocity_s_m, mNumDigits);
+        result = encoded_speed_s_m.mantissaString + " " + encoded_speed_s_m.exponentString + "s/m";
+        tv_result_speed_s_m.setText(result);
+
+        EngineeringNotationTools.MantissaExponent encoded_speed_s_in = EngineeringNotationTools.encodeMantissa(velocity_s_in, mNumDigits);
+        result = encoded_speed_s_in.mantissaString + " " + encoded_speed_s_in.exponentString + "s/in";
+        tv_result_speed_s_in.setText(result);
 
 
         // lamdas -------------------------------------------------------------
@@ -387,5 +415,19 @@ public class MainActivity extends AppCompatActivity {
         loadPreferences();
         calculateResults();
         super.onResume();
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "onActivityResult: requestCode == " + requestCode);
+
+        if (requestCode == RESULT_CODE_TLINE_VF) {
+            if (resultCode == Activity.RESULT_OK) {
+                double newVf = data.getDoubleExtra("VF", 1.0);
+                mVf_et.setText(String.valueOf(newVf));
+                calculateResults();
+            }
+        }
     }
 }

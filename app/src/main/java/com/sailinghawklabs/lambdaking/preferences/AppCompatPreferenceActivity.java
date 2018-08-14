@@ -1,4 +1,4 @@
-package com.sailinghawklabs.lambdaking;
+package com.sailinghawklabs.lambdaking.preferences;
 
 import android.content.res.Configuration;
 import android.os.Bundle;

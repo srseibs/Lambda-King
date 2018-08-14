@@ -13,10 +13,11 @@
 
     </PreferenceCategory>
 
-    <EditTextPreference
-        android:title="@string/pref_title_digits"
+    <ListPreference
         android:key="@string/pref_key_digits"
-        android:numeric="integer"
-        />
+        android:entries="@array/decimal_choice_entries"
+        android:entryValues="@array/decimal_choice_entries"
+        android:defaultValue="@string/pref_def_digits"
+        android:title="@string/pref_title_digits"/>
 
 </PreferenceScreen>

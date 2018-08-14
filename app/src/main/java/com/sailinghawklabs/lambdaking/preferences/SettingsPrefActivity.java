@@ -1,4 +1,4 @@
-package com.sailinghawklabs.lambdaking;
+package com.sailinghawklabs.lambdaking.preferences;
 
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -8,6 +8,8 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.MenuItem;
+
+import com.sailinghawklabs.lambdaking.R;
 
 
 public class SettingsPrefActivity extends AppCompatPreferenceActivity {
@@ -36,6 +38,7 @@ public class SettingsPrefActivity extends AppCompatPreferenceActivity {
 
             // notification preference change listeners to update the Summary fields
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_key_digits)), getActivity().getString(R.string.pref_def_digits));
+
 //            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_key_midmorning)), getActivity().getString(R.string.pref_def_midmorning));
 //            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_key_lunch)), getActivity().getString(R.string.pref_def_lunch));
 //            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_key_afternoon)), getActivity().getString(R.string.pref_def_afternoon));

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".tlines.SelectTlineActivity">
+
+
+    <include
+        android:id="@+id/select_tline_title"
+        style="@style/TextAppearance.AppCompat.Headline"
+        layout="@layout/tline_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"/>
+
+    <View
+        android:layout_marginTop="8dp"
+        style="@style/ResultTableVerticalLine"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/activity_tline_rv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:scrollbars="vertical"/>
+
+</LinearLayout>

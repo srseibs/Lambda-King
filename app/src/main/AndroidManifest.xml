@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/MyAppTheme.NoActionBar">
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize|adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -18,9 +19,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SettingsPrefActivity"
+            android:name=".preferences.SettingsPrefActivity"
             android:exported="false"
             android:theme="@style/AppTheme"/>
+        <activity android:name=".tlines.SelectTlineActivity"
+                  android:exported="false"
+                  android:theme="@style/AppTheme"
+
+                  android:parentActivityName=".MainActivity">
+                 <!-- Parent activity meta-data to support 4.0 and lower -->
+                <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                 android:value=".MainActivity"/>
+        </activity>
     </application>
 
 </manifest>
