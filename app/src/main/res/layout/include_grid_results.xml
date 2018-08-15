@@ -9,24 +9,7 @@
              android:showDividers="beginning|middle|end"
              android:stretchColumns="0,1,2">
 
-    <TableRow>
-        <TextView
-            style="@style/ResultTableRowTitle"
-            android:layout_height="wrap_content"
-            android:layout_column="0"
-            android:text="Phase Shift"
-            />
 
-        <TextView
-            android:id="@+id/result_phase_shift_deg"
-            style="@style/ResultTableResults"
-            android:layout_height="wrap_content"
-            android:layout_column="1"
-            android:text="124.23 deg"
-            />
-    </TableRow>
-
-    <View style="@style/ResultTableVerticalLine"/>
 
     <TableRow>
 
@@ -41,10 +24,10 @@
             android:id="@+id/result_delay"
             style="@style/ResultTableResults"
             android:layout_height="wrap_content"
+            android:layout_span="2"
             android:text="445.2 ns"
             />
     </TableRow>
-
     <View style="@style/ResultTableVerticalLine"/>
 
     <TableRow>
@@ -62,30 +45,7 @@
             android:layout_height="wrap_content"
             android:text="1.54 Lambda"
             />
-
-
     </TableRow>
-
-    <View style="@style/ResultTableVerticalLine"/>
-
-    <TableRow>
-        <TextView
-            style="@style/ResultTableRowTitle"
-            android:layout_height="wrap_content"
-            android:layout_column="0"
-            android:text="Epsilon"
-            />
-
-        <TextView
-            android:id="@+id/result_epsilon"
-            style="@style/ResultTableResults"
-            android:layout_height="wrap_content"
-            android:layout_column="1"
-            android:text="1.245"
-            />
-    </TableRow>
-
-
     <View style="@style/ResultTableVerticalLine"/>
 
     <TableRow>
@@ -96,31 +56,6 @@
             android:text="Speed"
             />
 
-        <TextView
-            android:id="@+id/result_speed_m_s"
-            style="@style/ResultTableResults"
-            android:layout_height="wrap_content"
-            android:layout_column="1"
-            android:text="300.12 Mm/s"
-            />
-
-        <TextView
-            android:id="@+id/result_speed_mi_s"
-            style="@style/ResultTableResults"
-            android:layout_height="wrap_content"
-            android:text="94231 mi/s"
-            />
-    </TableRow>
-
-
-    <TableRow>
-        <View
-            style="@style/ResultTableVerticalLine"
-            android:layout_column="1"
-            android:layout_span="2"/>
-    </TableRow>
-
-    <TableRow>
         <TextView
             android:id="@+id/result_speed_s_m"
             style="@style/ResultTableResults"
@@ -137,6 +72,41 @@
             />
     </TableRow>
 
+    <TableRow>
+        <TextView
+            android:id="@+id/result_speed_m_s"
+            style="@style/ResultTableResults"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:text="300.12 Mm/s"
+            />
+
+        <TextView
+            android:id="@+id/result_speed_mi_s"
+            style="@style/ResultTableResults"
+            android:layout_height="wrap_content"
+            android:text="94231 mi/s"
+            />
+    </TableRow>
+    <View style="@style/ResultTableVerticalLine"/>
+
+    <TableRow>
+        <TextView
+            style="@style/ResultTableRowTitle"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:text="Epsilon"
+            />
+
+        <TextView
+            android:id="@+id/result_epsilon"
+            style="@style/ResultTableResults"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_span="2"
+            android:text="1.245"
+            />
+    </TableRow>
     <View style="@style/ResultTableVerticalLine"/>
 
     <TableRow>
@@ -161,7 +131,6 @@
             android:text="37.345 ft"
             />
     </TableRow>
-
     <View style="@style/ResultTableVerticalLine"/>
 
     <TableRow>
@@ -186,7 +155,6 @@
             android:text="15.345 ft"
             />
     </TableRow>
-
     <View style="@style/ResultTableVerticalLine"/>
 
     <TableRow>
@@ -211,7 +179,6 @@
             android:text="3.12 ft"
             />
     </TableRow>
-
     <View style="@style/ResultTableVerticalLine"/>
 
     <TableRow>
@@ -287,7 +254,44 @@
             android:text="0.24 MHz/deg"
             />
     </TableRow>
+    <View style="@style/ResultTableVerticalLine"/>
 
+    <TableRow>
+        <TextView
+            style="@style/ResultTableRowTitle"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:text="VSWR Ripple"
+            />
 
+        <TextView
+            android:id="@+id/result_vswr_ripple"
+            style="@style/ResultTableResults"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_span="2"
+            android:text="25.12 MHz spacing"
+            />
+    </TableRow>
+    <View style="@style/ResultTableVerticalLine"/>
+
+    <TableRow>
+        <TextView
+            style="@style/ResultTableRowTitle"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:text="Phase Shift"
+            />
+
+        <TextView
+            android:id="@+id/result_phase_shift_deg"
+            style="@style/ResultTableResults"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_span="2"
+            android:text="124.23 deg"
+            />
+    </TableRow>
+    <View style="@style/ResultTableVerticalLine"/>
 
 </TableLayout>

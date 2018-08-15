@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.result_slope_deg_in) TextView tv_result_slope_deg_ft;
     @BindView(R.id.result_slope_deg_hz) TextView tv_result_slope_deg_hz;
     @BindView(R.id.result_slope_hz_deg) TextView tv_result_slope_hz_deg;
+    @BindView(R.id.result_vswr_ripple) TextView tv_result_vswr_spacing_hz;
 
     @BindView(R.id.main_tl_list) TextView tv_tranLine_list_button;
 
@@ -186,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
         lengthUnits.put(1.0, "m");
         lengthUnits.put(1e-1, "cm");
         lengthUnits.put(1e-3, "mm");
+        lengthUnits.put(1/(1000 * 12 * PhysicalConstants.FEET_PER_METER_ft), "mil");
         lengthUnits.put(1/(12 * PhysicalConstants.FEET_PER_METER_ft), "in");
         lengthUnits.put(1/PhysicalConstants.FEET_PER_METER_ft, "ft");
 
@@ -263,6 +265,14 @@ public class MainActivity extends AppCompatActivity {
         Double lambda_m = velocity_m_s / frequency_Hz;
         Double phaseShift_deg = 360.0 * cableLength_m / lambda_m ;
         Double delay_s = cableLength_m / velocity_m_s;
+
+        //   wavelen_m = CL/2
+        //   f*wavelen_m = velocity_m_s
+        //   f = 2 * velocity_m_s / CL;
+        Double vswr_ripple_spacing_hz = 2.0 * velocity_m_s / cableLength_m;
+
+
+
         Double num_wavelens = cableLength_m / lambda_m;
         Double phase_slope_m_deg = cableLength_m / phaseShift_deg;
         Double phase_slope_ft_deg = phase_slope_m_deg * PhysicalConstants.FEET_PER_METER_ft;
@@ -325,12 +335,12 @@ public class MainActivity extends AppCompatActivity {
         // epsilon ------------------------------------------------------------------
         tv_result_epsilon.setText(String.format(Locale.US, "%." + mNumDigits + "f (relative)", epsilon_r));
 
+        // VSWR ripple spacing -------------------------------------------------------
+        EngineeringNotationTools.MantissaExponent encoded_ripple_hz = EngineeringNotationTools.encodeMantissa(vswr_ripple_spacing_hz, mNumDigits);
+        result = encoded_ripple_hz.mantissaString + " " + encoded_ripple_hz.exponentString + "Hz spacing";
+        tv_result_vswr_spacing_hz.setText(result);
+
     }
-
-
-
-
-
 
     private TextView.OnFocusChangeListener myEditTextOnFocusChangeListener = new TextView.OnFocusChangeListener() {
         @Override

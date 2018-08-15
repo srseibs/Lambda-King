@@ -1,18 +1,31 @@
-﻿0.67,Optical fiber
-0.65,RG-58A/U
-0.65,Cat-6A twisted pair
-0.64,Cat-5e twisted pair
-0.585,Cat-3 twisted pair
-0.83,RG-6 Belden 1189A coaxial cable
-0.82,RG-8X Belden 9258 coaxial cable (foamed polyethylene dielectric)
+﻿0.66,Belden 8723 twin shielded twisted pair stranded (polypropylene insulator)
 0.8,Belden 9085 twin-lead
-0.66,Belden 8723 twin shielded twisted pair stranded (polypropylene insulator)
-0.66,RG-213 CXP213 coaxial cable (solid polyethylene dielectric)
-0.77,RG-8/U
-0.67,Optical fiber
-0.65,RG-58A/U
-0.65,Cat-6A twisted pair
-0.64,Cat-5e twisted pair
 0.585,Cat-3 twisted pair
+0.64,Cat-5e twisted pair
+0.65,Cat-6A twisted pair
+0.67,Optical fiber
+0.840,RG-11/U Foam HDPE (Beld. 9292)
+0.735,RG-174 Foam (Belden 7805R)
+0.660,RG-174 PE (Belden 8216)
+0.66,RG-213 CXP213 coaxial cable (solid polyethylene dielectric)
+0.660,RG-213/U (Belden 8267)
+0.660,RG-58/U PE (Belden 9201)
+0.65,RG-58A/U
+0.730,RG-58A/U Foam (Belden 8219)
+0.780,RG-59A/U Foam (Belden 8241F)
+0.660,RG-59A/U PE (Belden 8241)
 0.83,RG-6 Belden 1189A coaxial cable
+0.810,RG-6/U Foam (Belden 9290)
+0.660,RG-6/U PE (Belden 8215)
+0.77,RG-8/U
+0.840,RG-8/U (Belden 9913)
+0.660,RG-8/U PE (Belden 8237)
+0.780,RG-8/U Foam (Belden 8214)
+0.820,RG-8X (Belden 9258)
 0.82,RG-8X Belden 9258 coaxial cable (foamed polyethylene dielectric)
+0.577,Rogers RO3003
+0.403,Rogers RO3006
+0.313,Rogers RO3010
+0.535,Rogers RO3035
+0.544,Rogers RO4003C
+0.536,Rogers RO4350B
