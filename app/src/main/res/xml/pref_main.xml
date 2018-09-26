@@ -5,19 +5,13 @@
     <PreferenceCategory
         android:title="@string/pref_settings_title_text">
 
-        <Preference
-            android:key="key_explain"
-            android:summary="blah blah blah"
-            android:title="explanation of something"/>
-
-
-    </PreferenceCategory>
-
     <ListPreference
         android:key="@string/pref_key_digits"
         android:entries="@array/decimal_choice_entries"
         android:entryValues="@array/decimal_choice_entries"
         android:defaultValue="@string/pref_def_digits"
         android:title="@string/pref_title_digits"/>
+
+    </PreferenceCategory>
 
 </PreferenceScreen>
