@@ -269,7 +269,9 @@ public class MainActivity extends AppCompatActivity {
         //   wavelen_m = CL/2
         //   f*wavelen_m = velocity_m_s
         //   f = 2 * velocity_m_s / CL;
-        Double vswr_ripple_spacing_hz = 2.0 * velocity_m_s / cableLength_m;
+
+        //  https://www.microwaves101.com/encyclopedias/cable-length-rule-of-thumb
+        Double vswr_ripple_spacing_hz = velocity_m_s / (2.0 * cableLength_m);
 
 
 
