@@ -248,97 +248,69 @@ public class MainActivity extends AppCompatActivity {
 
         AutoRanger autoRanger = new AutoRanger(mNumDigits);
 
+        Results calcs = Calculator.execute(frequency_Hz, cableLength_m, velocityFactor);
 
+        // -------------------------------------------------------------------------------------
+        // Adjust the units and display results
         // auto-units: *s, *m, ft|in|mi|mil|yd,
 
-        // (1) Velocity = F * Lambda  [m/s]
-        // (2) Velocity = c * Vp [m/s]
-        // (3) Lambda = c * Vp  / F  [m]    From (1) and (2)
-        // (4) Lambda/2, Lambda/4 [m]       From (3)
-        // (5) PhaseShift = 360 * CableLength / Lambda  [m]
-
-        // calculate some basic intermediate results
-        Double velocity_m_s = PhysicalConstants.SPEED_OF_LIGHT_mps * velocityFactor;
-        Double velocity_mi_s = velocity_m_s /  (PhysicalConstants.FEET_PER_MILE_ft * PhysicalConstants.FEET_PER_METER_ft);
-        Double velocity_s_m = 1/velocity_m_s;
-        Double velocity_s_in =  velocity_s_m / (12 * PhysicalConstants.FEET_PER_METER_ft);
-        Double lambda_m = velocity_m_s / frequency_Hz;
-        Double phaseShift_deg = 360.0 * cableLength_m / lambda_m ;
-        Double delay_s = cableLength_m / velocity_m_s;
-
-        //   wavelen_m = CL/2
-        //   f*wavelen_m = velocity_m_s
-        //   f = 2 * velocity_m_s / CL;
-
-        //  https://www.microwaves101.com/encyclopedias/cable-length-rule-of-thumb
-        Double vswr_ripple_spacing_hz = velocity_m_s / (2.0 * cableLength_m);
-
-
-
-        Double num_wavelens = cableLength_m / lambda_m;
-        Double phase_slope_m_deg = cableLength_m / phaseShift_deg;
-        Double phase_slope_ft_deg = phase_slope_m_deg * PhysicalConstants.FEET_PER_METER_ft;
-        Double phase_slope_deg_hz = phaseShift_deg / frequency_Hz;
-        Double epsilon_r = 1 / (velocityFactor * velocityFactor);
-
-
-        tv_result_phase_shift_deg.setText(autoRanger.rangePhase(phaseShift_deg).toEngineeringString());
-        tv_result_delay_s.setText(autoRanger.rangeTime(delay_s).toEngineeringString());
-        tv_result_elen.setText(autoRanger.rangeWavelengths(num_wavelens).toEngineeringString());
+        tv_result_phase_shift_deg.setText(autoRanger.rangePhase(calcs.phaseShift_deg).toEngineeringString());
+        tv_result_delay_s.setText(autoRanger.rangeTime(calcs.delay_s).toEngineeringString());
+        tv_result_elen.setText(autoRanger.rangeWavelengths(calcs.num_wavelens).toEngineeringString());
 
 
         // speed --------------------------------------------------------------------
-        EngineeringNotationTools.MantissaExponent encoded_speed_m_s = EngineeringNotationTools.encodeMantissa(velocity_m_s, mNumDigits);
+        EngineeringNotationTools.MantissaExponent encoded_speed_m_s = EngineeringNotationTools.encodeMantissa(calcs.velocity_m_s, mNumDigits);
         String result = encoded_speed_m_s.mantissaString + " " + encoded_speed_m_s.exponentString + "m/s";
         tv_result_speed_m_s.setText(result);
 
-        EngineeringNotationTools.MantissaExponent encoded_speed_mi_s = EngineeringNotationTools.encodeMantissa(velocity_mi_s, mNumDigits);
+        EngineeringNotationTools.MantissaExponent encoded_speed_mi_s = EngineeringNotationTools.encodeMantissa(calcs.velocity_mi_s, mNumDigits);
         result = encoded_speed_mi_s.mantissaString + " " + encoded_speed_m_s.exponentString + "mi/s";
         tv_result_speed_mi_s.setText(result);
 
-        EngineeringNotationTools.MantissaExponent encoded_speed_s_m = EngineeringNotationTools.encodeMantissa(velocity_s_m, mNumDigits);
+        EngineeringNotationTools.MantissaExponent encoded_speed_s_m = EngineeringNotationTools.encodeMantissa(calcs.velocity_s_m, mNumDigits);
         result = encoded_speed_s_m.mantissaString + " " + encoded_speed_s_m.exponentString + "s/m";
         tv_result_speed_s_m.setText(result);
 
-        EngineeringNotationTools.MantissaExponent encoded_speed_s_in = EngineeringNotationTools.encodeMantissa(velocity_s_in, mNumDigits);
+        EngineeringNotationTools.MantissaExponent encoded_speed_s_in = EngineeringNotationTools.encodeMantissa(calcs.velocity_s_in, mNumDigits);
         result = encoded_speed_s_in.mantissaString + " " + encoded_speed_s_in.exponentString + "s/in";
         tv_result_speed_s_in.setText(result);
 
 
         // lamdas -------------------------------------------------------------
-        tv_result_lambda_m.setText(autoRanger.rangeLength(lambda_m).toEngineeringString());
-        tv_result_lambda_ft.setText(autoRanger.rangeLengthImperial(lambda_m).toEngineeringString());
+        tv_result_lambda_m.setText(autoRanger.rangeLength(calcs.lambda_m).toEngineeringString());
+        tv_result_lambda_ft.setText(autoRanger.rangeLengthImperial(calcs.lambda_m).toEngineeringString());
 
-        tv_result_lambda_2_m.setText(autoRanger.rangeLength(lambda_m/2).toEngineeringString());
-        tv_result_lambda_2_ft.setText(autoRanger.rangeLengthImperial(lambda_m/2).toEngineeringString());
-        tv_result_lambda_4_m.setText(autoRanger.rangeLength(lambda_m/4).toEngineeringString());
-        tv_result_lambda_4_ft.setText(autoRanger.rangeLengthImperial(lambda_m/4).toEngineeringString());
+        tv_result_lambda_2_m.setText(autoRanger.rangeLength(calcs.lambda_m/2).toEngineeringString());
+        tv_result_lambda_2_ft.setText(autoRanger.rangeLengthImperial(calcs.lambda_m/2).toEngineeringString());
+        tv_result_lambda_4_m.setText(autoRanger.rangeLength(calcs.lambda_m/4).toEngineeringString());
+        tv_result_lambda_4_ft.setText(autoRanger.rangeLengthImperial(calcs.lambda_m/4).toEngineeringString());
 
         // phase slopes --------------------------------------------------
-        tv_result_slope_m_deg.setText(autoRanger.rangeLength(phase_slope_m_deg).toEngineeringString()+"/deg");
-        tv_result_slope_ft_deg.setText(autoRanger.rangeLengthImperial(phase_slope_m_deg).toEngineeringString()+"/deg");
+        tv_result_slope_m_deg.setText(autoRanger.rangeLength(calcs.phase_slope_m_deg).toEngineeringString()+"/deg");
+        tv_result_slope_ft_deg.setText(autoRanger.rangeLengthImperial(calcs.phase_slope_m_deg).toEngineeringString()+"/deg");
 
-        EngineeringNotationTools.MantissaExponent encodedSlope_deg_m = EngineeringNotationTools.encodeMantissa(1/phase_slope_m_deg, mNumDigits);
+        EngineeringNotationTools.MantissaExponent encodedSlope_deg_m = EngineeringNotationTools.encodeMantissa(1/calcs.phase_slope_m_deg, mNumDigits);
         result = encodedSlope_deg_m.mantissaString + " " + encodedSlope_deg_m.exponentString + "deg/m";
         tv_result_slope_deg_m.setText(result);
 
-        EngineeringNotationTools.MantissaExponent encodedSlope_deg_ft = EngineeringNotationTools.encodeMantissa(1/phase_slope_ft_deg, mNumDigits);
+        EngineeringNotationTools.MantissaExponent encodedSlope_deg_ft = EngineeringNotationTools.encodeMantissa(1/calcs.phase_slope_ft_deg, mNumDigits);
         result = encodedSlope_deg_ft.mantissaString + " " + encodedSlope_deg_ft.exponentString + "deg/ft";
         tv_result_slope_deg_ft.setText(result);
 
-        EngineeringNotationTools.MantissaExponent encodedSlope_deg_hz = EngineeringNotationTools.encodeMantissa(phase_slope_deg_hz, mNumDigits);
+        EngineeringNotationTools.MantissaExponent encodedSlope_deg_hz = EngineeringNotationTools.encodeMantissa(calcs.phase_slope_deg_hz, mNumDigits);
         result = encodedSlope_deg_hz.mantissaString + " " + encodedSlope_deg_hz.exponentString + "deg/Hz";
         tv_result_slope_deg_hz.setText(result);
 
-        EngineeringNotationTools.MantissaExponent encodedSlope_hz_deg = EngineeringNotationTools.encodeMantissa(1/ phase_slope_deg_hz, mNumDigits);
+        EngineeringNotationTools.MantissaExponent encodedSlope_hz_deg = EngineeringNotationTools.encodeMantissa(1/calcs.phase_slope_deg_hz, mNumDigits);
         result = encodedSlope_hz_deg.mantissaString + " " + encodedSlope_hz_deg.exponentString + "Hz/deg";
         tv_result_slope_hz_deg.setText(result);
 
         // epsilon ------------------------------------------------------------------
-        tv_result_epsilon.setText(String.format(Locale.US, "%." + mNumDigits + "f (relative)", epsilon_r));
+        tv_result_epsilon.setText(String.format(Locale.US, "%." + mNumDigits + "f (relative)", calcs.epsilon_r));
 
         // VSWR ripple spacing -------------------------------------------------------
-        EngineeringNotationTools.MantissaExponent encoded_ripple_hz = EngineeringNotationTools.encodeMantissa(vswr_ripple_spacing_hz, mNumDigits);
+        EngineeringNotationTools.MantissaExponent encoded_ripple_hz = EngineeringNotationTools.encodeMantissa(calcs.vswr_ripple_spacing_hz, mNumDigits);
         result = encoded_ripple_hz.mantissaString + " " + encoded_ripple_hz.exponentString + "Hz spacing";
         tv_result_vswr_spacing_hz.setText(result);
 
