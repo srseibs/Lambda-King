@@ -18,6 +18,8 @@ public class Calculator {
         temp.velocity_mi_s = temp.velocity_m_s /  (PhysicalConstants.FEET_PER_MILE_ft * PhysicalConstants.FEET_PER_METER_ft);
         temp.velocity_s_m = 1/temp.velocity_m_s;
         temp.velocity_s_in =  temp.velocity_s_m / (12 * PhysicalConstants.FEET_PER_METER_ft);
+
+
         temp.lambda_m = temp.velocity_m_s / frequency_Hz;
         temp.phaseShift_deg = 360.0 * cableLength_m / temp.lambda_m ;
         temp.delay_s = cableLength_m / temp.velocity_m_s;
