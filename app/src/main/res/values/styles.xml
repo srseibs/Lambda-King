@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -12,12 +12,22 @@
 
     </style>
 
+    <style name="MyEntryButtons">
+        <item name="android:padding">4dp</item>
+        <item name="android:elevation">4dp</item>
+        <item name="android:textColor">@android:color/black</item>
+
+        <item name="android:background">@drawable/shape_button_rounded_white_border</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
+
     <style name="MyAppTheme.NoActionBar" parent="AppTheme">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="MyPopupTheme" parent="Theme.AppCompat.Light">
         <item name="colorAccent">@color/colorPrimaryDark</item>
@@ -25,7 +35,7 @@
 
 
     <style name="ItemTextAppearance">
-       <!--<item name="android:textStyle">normal</item>-->
+        <!--<item name="android:textStyle">normal</item>-->
     </style>
 
     <style name="ResultTableRowTitle" parent="AppTheme">
@@ -57,6 +67,8 @@
 
     <style name="ValueTextLabels">
         <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textAlignment">center</item>
 
     </style>
 

@@ -1,25 +1,21 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Lambda King</string>
-    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+
+    <string name="banner_ad_unit_id_PRODUCTION">main_bannerca-app-pub-2187584046682559/3769756520</string>
+    <string name="banner_ad_unit_id_DEMO" tools:ignore="UnusedResources">ca-app-pub-3940256099942544/6300978111</string>
+
+    <string name="banner_ad_unit_id">@string/banner_ad_unit_id_PRODUCTION</string>
+    <string name="frequency">Frequency</string>
+    <string name="velocity_factor">Velocity Factor</string>
+    <string name="er">Er</string>
+    <string name="cable_length">Cable Length</string>
 
 
+    <!--    this is only used in the layout preview - MainActivity creates the real map array -->
     <string-array name="freq_units">
         <item>GHz</item>
-        <item>MHz</item>
-        <item>kHz</item>
-        <item>Hz</item>
     </string-array>
-
     <string-array name="length_units">
-        <item>km</item>
-        <item>m</item>
-        <item>cm</item>
-        <item>mm</item>
-        <item>um</item>
-        <item>in</item>
-        <item>mil</item>
-        <item>ft</item>
-        <item>yd</item>
-        <item>mi</item>
+        <item>!</item>
     </string-array>
 </resources>

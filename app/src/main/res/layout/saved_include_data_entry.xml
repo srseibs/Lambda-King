@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -22,181 +23,170 @@
             android:layout_height="wrap_content"
             android:background="@android:color/white">
 
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Enter values:"
+                android:textAppearance="@android:style/TextAppearance.Material.DialogWindowTitle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:id="@+id/main_tv_freqLabel"
                 style="@style/ValueTextLabels"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:text="@string/frequency"
+                android:layout_marginStart="8dp"
+                android:text="Frequency"
                 app:layout_constraintBottom_toBottomOf="@+id/main_et_freq"
-                app:layout_constraintEnd_toStartOf="@+id/guidelineL"
-                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintEnd_toStartOf="@+id/main_et_freq"
                 app:layout_constraintStart_toStartOf="@+id/guideline2"
-                app:layout_constraintTop_toTopOf="@+id/main_et_freq" />
+                app:layout_constraintTop_toTopOf="@+id/main_et_freq"/>
 
             <com.sailinghawklabs.lambdaking.EditTextWithClear
                 android:id="@+id/main_et_freq"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:hint="@string/frequency"
+                android:layout_marginStart="8dp"
+                android:hint="Frequency"
                 android:imeOptions="actionDone"
                 android:inputType="numberDecimal"
+                android:text="300"
                 android:textAlignment="center"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_R"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/guidelineL"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/textView3"
+                />
 
             <Spinner
                 android:id="@+id/freq_units_spinner"
-                style="@style/MyEntryButtons"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:gravity="center_horizontal"
+
+                android:background="@android:drawable/editbox_background"
+                android:drawSelectorOnTop="true"
+                android:theme="@style/ItemTextAppearance"
                 app:layout_constraintBaseline_toBaselineOf="@+id/main_et_freq"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guideline_R"
-                tools:entries="@array/freq_units" />
+                tools:entries="@array/freq_units"/>
 
             <TextView
                 android:id="@+id/main_tv_cableLength"
                 style="@style/ValueTextLabels"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:text="@string/cable_length"
+                android:text="Cable\nLength"
                 android:textAlignment="center"
                 app:layout_constraintBottom_toBottomOf="@+id/main_et_length"
-                app:layout_constraintEnd_toStartOf="@+id/guidelineL"
-                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintEnd_toStartOf="@+id/main_et_length"
                 app:layout_constraintStart_toStartOf="@+id/guideline2"
-                app:layout_constraintTop_toTopOf="@+id/main_et_length" />
+                app:layout_constraintTop_toTopOf="@+id/main_et_length"/>
 
             <com.sailinghawklabs.lambdaking.EditTextWithClear
                 android:id="@+id/main_et_length"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:hint="@string/cable_length"
+                android:layout_marginStart="8dp"
+                android:ems="10"
+                android:hint="Cable length"
                 android:imeOptions="actionDone"
                 android:inputType="numberDecimal"
                 android:minEms="3"
+                android:text="1"
                 android:textAlignment="center"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_R"
                 app:layout_constraintStart_toStartOf="@+id/guidelineL"
-                app:layout_constraintTop_toBottomOf="@+id/main_et_freq" />
+                app:layout_constraintTop_toBottomOf="@+id/main_et_freq"/>
 
             <Spinner
                 android:id="@+id/length_unit_spinner"
-                style="@style/MyEntryButtons"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:gravity="center_horizontal"
-                app:layout_constraintBaseline_toBaselineOf="@+id/main_et_length"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/guideline_R"
-                tools:entries="@array/length_units" />
 
+                android:background="@android:drawable/editbox_background"
+                android:theme="@style/ItemTextAppearance"
+                app:layout_constraintBaseline_toBaselineOf="@+id/main_et_length"
+                app:layout_constraintStart_toStartOf="@+id/guideline_R"
+                tools:entries="@array/length_units"/>
 
             <TextView
-                android:id="@+id/main_tl_list"
-                style="@style/MyEntryButtons"
-                android:layout_width="0dp"
+                android:id="@+id/main_tv_vfLabel"
+                style="@style/ValueTextLabels"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:clickable="true"
-                android:text="@string/velocity_factor"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Velocity\nFactor (Vf)"
+                android:textAlignment="center"
                 app:layout_constraintBottom_toBottomOf="@+id/main_et_vf"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/guideline_R"
-                app:layout_constraintTop_toTopOf="@+id/main_et_vf"
-                app:layout_constraintVertical_bias="0.608" />
+                app:layout_constraintEnd_toStartOf="@+id/main_et_vf"
+                app:layout_constraintStart_toStartOf="@+id/guideline2"
+                app:layout_constraintTop_toTopOf="@+id/main_et_vf"/>
 
             <com.sailinghawklabs.lambdaking.EditTextWithClear
                 android:id="@+id/main_et_vf"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
-                android:hint="@string/velocity_factor"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:ems="5"
+                android:hint="Velocity Factor"
+
                 android:imeOptions="actionDone"
                 android:inputType="numberDecimal"
+                android:text="1.0"
                 android:textAlignment="center"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_R"
-                app:layout_constraintStart_toStartOf="@+id/guideline_C"
-                app:layout_constraintTop_toBottomOf="@+id/main_et_length"
-                app:layout_constraintVertical_bias="1.0" />
-
-            <TextView
-                android:id="@+id/main_tv_erLabel"
-                style="@style/ValueTextLabels"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:text="@string/er"
-                android:textAlignment="center"
-                app:layout_constraintBaseline_toBaselineOf="@+id/main_et_vf"
-                app:layout_constraintEnd_toStartOf="@+id/guidelineL"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <com.sailinghawklabs.lambdaking.EditTextWithClear
-                android:id="@+id/main_et_er"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:ems="5"
-                android:hint="@string/velocity_factor"
-                android:imeOptions="actionDone"
-                android:inputType="numberDecimal"
-                android:textAlignment="center"
-                app:layout_constraintBaseline_toBaselineOf="@+id/main_et_vf"
-                app:layout_constraintEnd_toStartOf="@+id/guideline_C"
-                app:layout_constraintStart_toStartOf="@+id/guidelineL" />
+                app:layout_constraintStart_toStartOf="@+id/guidelineL"
+                app:layout_constraintTop_toBottomOf="@+id/main_et_length"/>
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guidelineL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.27" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline_C"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.5" />
+                app:layout_constraintGuide_percent="0.27"/>
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline_R"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.72" />
+                app:layout_constraintGuide_percent="0.72"/>
+
+            <TextView
+                android:id="@+id/main_tl_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/editbox_background"
+                android:clickable="true"
+                android:text="List"
+                android:textAlignment="center"
+                android:textColor="@android:color/black"
+                app:layout_constraintBaseline_toBaselineOf="@+id/main_et_vf"
+                app:layout_constraintStart_toStartOf="@+id/guideline_R"/>
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_begin="8dp" />
+                app:layout_constraintGuide_begin="8dp"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

@@ -4,6 +4,8 @@ public class Results {
 
     // relative permittivity (epsilon)
     Double epsilon_r;
+    // either Epsilon or Vf is set by user, the other is calculated
+    Double velocityFactor;
 
     // velocities
     Double velocity_m_s;

@@ -65,7 +65,7 @@
             />
 
         <TextView
-            android:id="@+id/result_speed_s_mi"
+            android:id="@+id/result_speed_s_in"
             style="@style/ResultTableResults"
             android:layout_height="wrap_content"
             android:text="0.24 ns/mile"
@@ -86,25 +86,6 @@
             style="@style/ResultTableResults"
             android:layout_height="wrap_content"
             android:text="94231 mi/s"
-            />
-    </TableRow>
-    <View style="@style/ResultTableVerticalLine"/>
-
-    <TableRow>
-        <TextView
-            style="@style/ResultTableRowTitle"
-            android:layout_height="wrap_content"
-            android:layout_column="0"
-            android:text="Epsilon"
-            />
-
-        <TextView
-            android:id="@+id/result_epsilon"
-            style="@style/ResultTableResults"
-            android:layout_height="wrap_content"
-            android:layout_column="1"
-            android:layout_span="2"
-            android:text="1.245"
             />
     </TableRow>
     <View style="@style/ResultTableVerticalLine"/>
@@ -223,7 +204,7 @@
             />
 
         <TextView
-            android:id="@+id/result_slope_deg_in"
+            android:id="@+id/result_slope_deg_ft"
             style="@style/ResultTableResults"
             android:layout_height="wrap_content"
             android:text="0.24 deg/in"

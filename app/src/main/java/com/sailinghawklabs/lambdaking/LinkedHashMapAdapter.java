@@ -307,8 +307,8 @@ public class LinkedHashMapAdapter<K, V> extends BaseAdapter implements Filterabl
     public Entry<K, V> getItem(int position) {
         int i = 0;
         for (Entry<K, V> entry : mMapData.entrySet()) {
-            if (i++ == position) return entry;
-        }
+        if (i++ == position) return entry;
+    }
         return null;
     }
 
@@ -329,7 +329,7 @@ public class LinkedHashMapAdapter<K, V> extends BaseAdapter implements Filterabl
     }
 
     private View createViewFromResource(int position, View convertView, ViewGroup parent,
-                                        int resource) {
+            int resource) {
         View view;
         TextView text;
 
@@ -436,35 +436,35 @@ public class LinkedHashMapAdapter<K, V> extends BaseAdapter implements Filterabl
 
                     boolean matched = false;
                     if ((mFlags & FLAG_FILTER_ON_KEY) == FLAG_FILTER_ON_KEY) {
-                        if (keyText.startsWith(prefixString)) {
-                            matched = true;
-                        } else {
-                            final String[] words = keyText.split(" ");
-                            final int wordCount = words.length;
+                    if (keyText.startsWith(prefixString)) {
+                        matched = true;
+                    } else {
+                        final String[] words = keyText.split(" ");
+                        final int wordCount = words.length;
 
-                            for (int k = 0; k < wordCount; k++) {
-                                if (words[k].startsWith(prefixString)) {
-                                    matched = true;
-                                    break;
-                                }
+                        for (int k = 0; k < wordCount; k++) {
+                            if (words[k].startsWith(prefixString)) {
+                                matched = true;
+                                break;
                             }
                         }
                     }
+                }
                     if ((mFlags & FLAG_FILTER_ON_VALUE) == FLAG_FILTER_ON_VALUE) {
-                        if (valueText.startsWith(prefixString)) {
-                            matched = true;
-                        } else {
-                            final String[] words = valueText.split(" ");
-                            final int wordCount = words.length;
+                    if (valueText.startsWith(prefixString)) {
+                        matched = true;
+                    } else {
+                        final String[] words = valueText.split(" ");
+                        final int wordCount = words.length;
 
-                            for (int k = 0; k < wordCount; k++) {
-                                if (words[k].startsWith(prefixString)) {
-                                    matched = true;
-                                    break;
-                                }
+                        for (int k = 0; k < wordCount; k++) {
+                            if (words[k].startsWith(prefixString)) {
+                                matched = true;
+                                break;
                             }
                         }
                     }
+                }
 
                     if (matched) {
                         newValues.put(key, value);
@@ -485,10 +485,10 @@ public class LinkedHashMapAdapter<K, V> extends BaseAdapter implements Filterabl
                 result = "";
             }
             if ((mFlags & FLAG_FILTER_RESULT_USE_VALUE) == FLAG_FILTER_RESULT_USE_VALUE) {
-                return ((Entry<String, String>) resultValue).getValue();
-            } else {
-                return ((Entry<String, String>) resultValue).getKey();
-            }
+            return ((Entry<String, String>) resultValue).getValue();
+        } else {
+            return ((Entry<String, String>) resultValue).getKey();
+        }
         }
 
         @Override
