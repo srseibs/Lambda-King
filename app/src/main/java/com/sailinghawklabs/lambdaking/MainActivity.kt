@@ -357,8 +357,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun enableAdvertisements() {
         MobileAds.initialize(this) {
-            Log.d("MainActivity", "MobileAds initialization returned")
         }
+        Log.d("MainActivity", "MobileAds initialization returned")
 
         // add physical device(s) as Test Devices for development (not release)
         if (BuildConfig.DEBUG) {
