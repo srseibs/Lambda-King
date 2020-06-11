@@ -1,21 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto"
-      xmlns:tools="http://schemas.android.com/tools"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
-        android:id="@+id/mn_main_settings"
-        android:icon="@drawable/ic_action_settings"
-        android:orderInCategory="200"
-        android:title="Settings"
-        app:showAsAction="always"/>
+        android:id="@+id/mn_preset"
+        android:title="Preset"
+        app:showAsAction="ifRoom" />
+
     <item
         android:id="@+id/mn_main_help"
-        android:icon="@drawable/ic_action_help"
-        android:orderInCategory="300"
-        android:title="Help"
-        app:showAsAction="always"/>
+        android:icon="@drawable/ic_baseline_help_outline_24"
+        android:title="@string/help"
+        app:showAsAction="ifRoom" />
 
+    <item
+        android:id="@+id/mn_initialize"
+        android:title="Reset to Initial Values"
+        app:showAsAction="never" />
 
+    <item
+        android:id="@+id/mn_save"
+        android:title="Save as Preset"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/mn_main_about"
+        android:icon="@drawable/ic_baseline_help_outline_24"
+        android:title="About"
+        app:showAsAction="never" />
 
 </menu>

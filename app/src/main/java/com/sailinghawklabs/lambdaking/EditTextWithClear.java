@@ -24,6 +24,12 @@ public class EditTextWithClear extends AppCompatEditText implements View.OnTouch
         defaultValue = val;
     }
 
+    public void setAsDefaultValue() {
+        if (getText() != null) {
+            setDefaultValue(getText().toString());
+        }
+    }
+
     public void setToDefault() {
         setText(defaultValue);
     }

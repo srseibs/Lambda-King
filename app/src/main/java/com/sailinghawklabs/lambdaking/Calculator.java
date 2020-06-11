@@ -1,7 +1,12 @@
 package com.sailinghawklabs.lambdaking;
 
 public class Calculator {
-    public static Results execute(double frequency_Hz, double cableLength_m, double velocityFactor, double epsilon, Boolean epsilonMaster) {
+    public static Results execute(NumericEntryData entryData, Boolean epsilonMaster) {
+        double frequency_Hz = entryData.getFrequency_Hz();
+        double cableLength_m = entryData.getCableLength_m();
+        double velocityFactor = entryData.getVelocityFactor();
+        double epsilon = entryData.getEpsilon();
+
         // auto-units: *s, *m, ft|in|mi|mil|yd,
 
         // (1) Velocity = F * Lambda  [m/s]
@@ -11,20 +16,15 @@ public class Calculator {
         // (5) PhaseShift = 360 * CableLength / Lambda  [m]
         // (6) velocityFactor = 1 / (sqrt(epsilon)    epsilon = 1 / (velocityFactor^2)
 
-        // calculate some basic intermediate results
-
-        assert(epsilon > 0);
-        assert(velocityFactor > 0);
-
         Results temp = new Results();
 
         temp.velocity_m_s = PhysicalConstants.SPEED_OF_LIGHT_mps * velocityFactor;
-        temp.velocity_mi_s = temp.velocity_m_s /  (PhysicalConstants.FEET_PER_MILE_ft * PhysicalConstants.FEET_PER_METER_ft);
-        temp.velocity_s_m = 1/temp.velocity_m_s;
-        temp.velocity_s_in =  temp.velocity_s_m / (12 * PhysicalConstants.FEET_PER_METER_ft);
+        temp.velocity_mi_s = temp.velocity_m_s / (PhysicalConstants.FEET_PER_MILE_ft * PhysicalConstants.FEET_PER_METER_ft);
+        temp.velocity_s_m = 1 / temp.velocity_m_s;
+        temp.velocity_s_in = temp.velocity_s_m / (12 * PhysicalConstants.FEET_PER_METER_ft);
 
         temp.lambda_m = temp.velocity_m_s / frequency_Hz;
-        temp.phaseShift_deg = 360.0 * cableLength_m / temp.lambda_m ;
+        temp.phaseShift_deg = 360.0 * cableLength_m / temp.lambda_m;
         temp.delay_s = cableLength_m / temp.velocity_m_s;
 
         //  https://www.microwaves101.com/encyclopedias/cable-length-rule-of-thumb

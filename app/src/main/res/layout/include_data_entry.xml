@@ -33,7 +33,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/main_et_freq"
                 app:layout_constraintEnd_toStartOf="@+id/guidelineL"
                 app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="@+id/guideline2"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/main_et_freq" />
 
             <com.sailinghawklabs.lambdaking.EditTextWithClear
@@ -41,7 +41,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:hint="@string/frequency"
                 android:imeOptions="actionDone"
@@ -55,7 +54,7 @@
             <Spinner
                 android:id="@+id/freq_units_spinner"
                 style="@style/MyEntryButtons"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:gravity="center_horizontal"
@@ -67,18 +66,16 @@
             <TextView
                 android:id="@+id/main_tv_cableLength"
                 style="@style/ValueTextLabels"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
                 android:text="@string/cable_length"
-                android:textAlignment="center"
+                android:textAlignment="textEnd"
                 app:layout_constraintBottom_toBottomOf="@+id/main_et_length"
                 app:layout_constraintEnd_toStartOf="@+id/guidelineL"
                 app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="@+id/guideline2"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/main_et_length" />
 
             <com.sailinghawklabs.lambdaking.EditTextWithClear
@@ -99,7 +96,7 @@
             <Spinner
                 android:id="@+id/length_unit_spinner"
                 style="@style/MyEntryButtons"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:gravity="center_horizontal"
@@ -175,7 +172,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.27" />
+                app:layout_constraintGuide_percent="0.25" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline_C"
@@ -190,13 +187,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent="0.72" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_begin="8dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

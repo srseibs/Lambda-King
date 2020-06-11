@@ -21,7 +21,7 @@
 
     <View
         android:layout_marginTop="8dp"
-        style="@style/ResultTableVerticalLine"/>
+        style="@style/ResultTableHorizontalLine"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/activity_tline_rv"

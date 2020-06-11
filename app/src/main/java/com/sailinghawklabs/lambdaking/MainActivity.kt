@@ -14,41 +14,34 @@ import android.widget.AdapterView
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.preference.PreferenceManager
-
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.RequestConfiguration
 import com.sailinghawklabs.engineeringnotation.EngineeringNotationTools
-
-import com.sailinghawklabs.lambdaking.preferences.SettingsPrefActivity
 import com.sailinghawklabs.lambdaking.tlines.SelectTlineActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar.*
 import kotlinx.android.synthetic.main.include_data_entry.*
+import kotlinx.android.synthetic.main.include_data_entry.freq_units_spinner
+import kotlinx.android.synthetic.main.include_data_entry.length_unit_spinner
+import kotlinx.android.synthetic.main.include_data_entry.main_et_freq
+import kotlinx.android.synthetic.main.include_data_entry.main_et_length
+import kotlinx.android.synthetic.main.include_data_entry.main_et_vf
+import kotlinx.android.synthetic.main.include_data_entry.main_tl_list
 import kotlinx.android.synthetic.main.include_grid_results.*
-import java.lang.Exception
+import kotlinx.android.synthetic.main.saved_include_data_entry.*
 import java.util.*
-import kotlin.collections.LinkedHashMap
 
 class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val RESULT_CODE_TLINE_VF = 123
+        private const val DEFAULT_NUM_DP = 2
         private val TAG = MainActivity::class.java.simpleName
     }
 
-    private lateinit var freqUnits: LinkedHashMap<Double, String>
     private lateinit var freqSpinnerAdapter: LinkedHashMapAdapter<Double, String>
-    private lateinit var lengthUnits: LinkedHashMap<Double, String>
     private lateinit var lengthSpinnerAdapter: LinkedHashMapAdapter<Double, String>
-
-    // main values that are entered:
-    private var frequency_Hz = 0.0
-    private var cableLength_m = 0.0
-    private var velocityFactor = 0.0
-    private var epsilon = 1.0
-    private var mNumDigits = 0
 
     private var epsilonIsMaster = true
 
@@ -56,24 +49,13 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "onCreate: entered")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        loadPreferences()
         setSupportActionBar(toolbar)
         supportActionBar!!.title = getString(R.string.app_name)
         initializeViews()
         enableAdvertisements()
-
     }
 
     private fun initializeViews() {
-        main_et_freq.setDefaultValue("1.0")
-        main_et_freq.setToDefault()
-        main_et_length.setDefaultValue("1.0")
-        main_et_length.setToDefault()
-        main_et_vf.setDefaultValue("1.0")
-        main_et_vf.setToDefault()
-        main_et_er.setDefaultValue("1.0")
-        main_et_er.setToDefault()
-
         main_et_freq.setOnEditorActionListener(myEditorChangeListener)
         main_et_freq.onFocusChangeListener = myEditTextOnFocusChangeListener
 
@@ -85,6 +67,8 @@ class MainActivity : AppCompatActivity() {
 
         main_et_er.setOnEditorActionListener(myEditorChangeListener)
         main_et_er.onFocusChangeListener = myEditTextOnFocusChangeListener
+        main_et_er.setText("1")
+        main_tv_erLabel.text = Characters.EPSILON_SUB_R
 
         freq_units_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View, position: Int, id: Long) {
@@ -102,49 +86,22 @@ class MainActivity : AppCompatActivity() {
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
-
         main_tl_list.setOnClickListener {
             val intent = Intent(this, SelectTlineActivity::class.java)
             startActivityForResult(intent, RESULT_CODE_TLINE_VF)
         }
 
-        populateFreqUnits()
-        populateLengthUnits()
-    }
-
-    private fun populateFreqUnits() {
-        freqUnits = LinkedHashMap()
-
-        // populate map with value multipliers to yield Hz
-        freqUnits[1e15] = "PHz"
-        freqUnits[1e12] = "THz"
-        freqUnits[1e9] = "GHz"
-        freqUnits[1e6] = "MHz"
-        freqUnits[1e3] = "kHz"
-        freqUnits[1.0] = "Hz"
-        freqUnits[1e-3] = "mHz"
-        freqUnits[1e-6] = "uHz"
-        freqSpinnerAdapter = LinkedHashMapAdapter(this, android.R.layout.simple_spinner_item, freqUnits)
+        freqSpinnerAdapter = LinkedHashMapAdapter(this, android.R.layout.simple_spinner_item, FreqUnits)
         freqSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         freq_units_spinner.adapter = freqSpinnerAdapter
-        freq_units_spinner.setSelection(freqUnits.values.indexOf("MHz"))
-    }
 
-    private fun populateLengthUnits() {
-        lengthUnits = LinkedHashMap()
-
-        // populate map with value multipliers to yield m
-        lengthUnits[1e3] = "km"
-        lengthUnits[1.0] = "m"
-        lengthUnits[1e-1] = "cm"
-        lengthUnits[1e-3] = "mm"
-        lengthUnits[1 / (1000 * 12 * PhysicalConstants.FEET_PER_METER_ft)] = "mil"
-        lengthUnits[1 / (12 * PhysicalConstants.FEET_PER_METER_ft)] = "in"
-        lengthUnits[1 / PhysicalConstants.FEET_PER_METER_ft] = "ft"
-        lengthSpinnerAdapter = LinkedHashMapAdapter(this, android.R.layout.simple_spinner_item, lengthUnits)
+        lengthSpinnerAdapter = LinkedHashMapAdapter(this, android.R.layout.simple_spinner_item, LengthUnits)
         lengthSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         length_unit_spinner.adapter = lengthSpinnerAdapter
-        length_unit_spinner.setSelection(lengthUnits.values.indexOf("m"))
+
+        val defaultEntryState = EntryState.getDefault()
+        setEntryToState(defaultEntryState)
+        main_et_er.setAsDefaultValue()
     }
 
     private fun isEntryValid(et: EditText?, fieldName: String): Boolean {
@@ -160,45 +117,65 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkAllEntries(): Boolean {
-        return (isEntryValid(main_et_freq, "Frequency")
-                && isEntryValid(main_et_length, "Length")
-                && isEntryValid(main_et_vf, "Velocity"))
+        if (! isEntryValid(main_et_freq, "Frequency")) {
+            return false
+        }
+        if (! isEntryValid(main_et_length, "Length")) {
+            return false
+        }
+        return if (epsilonIsMaster) {
+            isEntryValid(main_et_er, Characters.EPSILON_SUB_R.toString())
+        } else {
+            isEntryValid(main_et_vf, "Velocity")
+        }
     }
 
-    private fun readEditTexts(): Boolean {
-        if (!checkAllEntries()) return false
+    private fun readEditTexts(): NumericEntryData {
+        Log.d("MainActivity", "readEditTexts: epsilonIsMaster=${epsilonIsMaster}")
+        if (!checkAllEntries()) {
+            Log.d("MainActivity", "readEditTexts: failed checkAllEntries")
+            return NumericEntryData(false)
+        }
 
-        // parse the entry EditTexts, since they should be OK to read now without error
-        frequency_Hz = (main_et_freq.text.toString()).toDouble()
-        cableLength_m = (main_et_length.text.toString()).toDouble()
-        velocityFactor = (main_et_vf.text.toString()).toDouble()
-        epsilon = (main_et_er.text.toString()).toDouble()
+        val numericEntryData = NumericEntryData()
+
+        numericEntryData.frequency_Hz = (main_et_freq.text.toString()).toDouble()
+        numericEntryData.cableLength_m = (main_et_length.text.toString()).toDouble()
+
+        if (! main_et_er.text.isNullOrEmpty()) {
+                numericEntryData.epsilon = (main_et_er.text.toString()).toDouble()
+        }
+        if (! main_et_vf.text.isNullOrEmpty()) {
+            numericEntryData.velocityFactor = (main_et_vf.text.toString()).toDouble()
+        }
 
         // apply suffix multipliers fron the Spinners
         var position = freq_units_spinner.selectedItemPosition
         val freqMultEntry = freqSpinnerAdapter.getItem(position)
-        if (freqMultEntry == null) {
-            throw Exception("MainActivity: readEditTexts: missing freq spinner entry position: $position")
-        }
+                ?: throw Exception("MainActivity: readEditTexts: missing freq spinner entry position: $position")
         val freqMultiplier = freqMultEntry.key
-        frequency_Hz *= freqMultiplier
+        numericEntryData.frequency_Hz *= freqMultiplier
 
         position = length_unit_spinner.selectedItemPosition
         val lengthMultEntry = lengthSpinnerAdapter.getItem(position)
-        if (lengthMultEntry == null) {
-            throw Exception("MainActivity: readEditTexts: missing length spinner entry position: $position")
-        }
+                ?: throw Exception("MainActivity: readEditTexts: missing length spinner entry position: $position")
         val lengthMultiplier = lengthMultEntry.key
-        cableLength_m *= lengthMultiplier
-        Log.d(TAG, "calculateResults: frequency= " + frequency_Hz + "Hz, length=" + cableLength_m + "m, Vf = " + velocityFactor)
-        return true
+        numericEntryData.cableLength_m *= lengthMultiplier
+        Log.d(TAG, "calculateResults: frequency= " + numericEntryData.frequency_Hz + "Hz, length="
+                + numericEntryData.cableLength_m + "m, Vf = " + numericEntryData.velocityFactor)
+        return numericEntryData
     }
 
-    private fun calculateResults() {
-        if (!readEditTexts()) return
-        val autoRanger = AutoRanger(mNumDigits)
-
-        val calcs = Calculator.execute(frequency_Hz, cableLength_m, velocityFactor, epsilon, epsilonIsMaster)
+    private fun refreshDisplay() {
+        Log.d("MainActivity", "refreshDisplay: ")
+        val numericEntryData = readEditTexts()
+        if (!numericEntryData.valid) {
+            Log.d("MainActivity", "refreshDisplay: numeric entry invalid - abort")
+            return
+        }
+        val autoRanger = AutoRanger(DEFAULT_NUM_DP)
+        val calcs =
+                Calculator.execute(numericEntryData, epsilonIsMaster)
 
         // -------------------------------------------------------------------------------------
         // Adjust the units and display results
@@ -207,21 +184,19 @@ class MainActivity : AppCompatActivity() {
         result_delay.text = autoRanger.rangeTime(calcs.delay_s).toEngineeringString()
         result_elen.text = autoRanger.rangeWavelengths(calcs.num_wavelens).toEngineeringString()
 
-
         // speed --------------------------------------------------------------------
-        val encoded_speed_m_s = EngineeringNotationTools.encodeMantissa(calcs.velocity_m_s, mNumDigits)
+        val encoded_speed_m_s = EngineeringNotationTools.encodeMantissa(calcs.velocity_m_s, DEFAULT_NUM_DP)
         var result = encoded_speed_m_s.mantissaString + " " + encoded_speed_m_s.exponentString + "m/s"
         result_speed_m_s.text = result
-        val encoded_speed_mi_s = EngineeringNotationTools.encodeMantissa(calcs.velocity_mi_s, mNumDigits)
+        val encoded_speed_mi_s = EngineeringNotationTools.encodeMantissa(calcs.velocity_mi_s, DEFAULT_NUM_DP)
         result = encoded_speed_mi_s.mantissaString + " " + encoded_speed_m_s.exponentString + "mi/s"
         result_speed_mi_s.text = result
-        val encoded_speed_s_m = EngineeringNotationTools.encodeMantissa(calcs.velocity_s_m, mNumDigits)
+        val encoded_speed_s_m = EngineeringNotationTools.encodeMantissa(calcs.velocity_s_m, DEFAULT_NUM_DP)
         result = encoded_speed_s_m.mantissaString + " " + encoded_speed_s_m.exponentString + "s/m"
         result_speed_s_m.text = result
-        val encoded_speed_s_in = EngineeringNotationTools.encodeMantissa(calcs.velocity_s_in, mNumDigits)
+        val encoded_speed_s_in = EngineeringNotationTools.encodeMantissa(calcs.velocity_s_in, DEFAULT_NUM_DP)
         result = encoded_speed_s_in.mantissaString + " " + encoded_speed_s_in.exponentString + "s/in"
         result_speed_s_in.text = result
-
 
         // lamdas -------------------------------------------------------------
         result_lambda_m.text = autoRanger.rangeLength(calcs.lambda_m).toEngineeringString()
@@ -232,31 +207,30 @@ class MainActivity : AppCompatActivity() {
         result_lambda_4_ft!!.text = autoRanger.rangeLengthImperial(calcs.lambda_m / 4).toEngineeringString()
 
         // phase slopes --------------------------------------------------
-        result_slope_m_deg.text = autoRanger.rangeLength(calcs.phase_slope_m_deg).toEngineeringString() + "/deg"
-        result_slope_ft_deg.text = autoRanger.rangeLengthImperial(calcs.phase_slope_m_deg).toEngineeringString() + "/deg"
-        val encodedSlope_deg_m = EngineeringNotationTools.encodeMantissa(1 / calcs.phase_slope_m_deg, mNumDigits)
+        result = autoRanger.rangeLength(calcs.phase_slope_m_deg).toEngineeringString() + "/deg"
+        result_slope_m_deg.text = result
+        result = autoRanger.rangeLengthImperial(calcs.phase_slope_m_deg).toEngineeringString() + "/deg"
+        result_slope_ft_deg.text = result
+        val encodedSlope_deg_m = EngineeringNotationTools.encodeMantissa(1 / calcs.phase_slope_m_deg, DEFAULT_NUM_DP)
         result = encodedSlope_deg_m.mantissaString + " " + encodedSlope_deg_m.exponentString + "deg/m"
         result_slope_deg_m.text = result
-        val encodedSlope_deg_ft = EngineeringNotationTools.encodeMantissa(1 / calcs.phase_slope_ft_deg, mNumDigits)
+        val encodedSlope_deg_ft = EngineeringNotationTools.encodeMantissa(1 / calcs.phase_slope_ft_deg, DEFAULT_NUM_DP)
         result = encodedSlope_deg_ft.mantissaString + " " + encodedSlope_deg_ft.exponentString + "deg/ft"
         result_slope_deg_ft.text = result
-        val encodedSlope_deg_hz = EngineeringNotationTools.encodeMantissa(calcs.phase_slope_deg_hz, mNumDigits)
+        val encodedSlope_deg_hz = EngineeringNotationTools.encodeMantissa(calcs.phase_slope_deg_hz, DEFAULT_NUM_DP)
         result = encodedSlope_deg_hz.mantissaString + " " + encodedSlope_deg_hz.exponentString + "deg/Hz"
         result_slope_deg_hz.text = result
-        val encodedSlope_hz_deg = EngineeringNotationTools.encodeMantissa(1 / calcs.phase_slope_deg_hz, mNumDigits)
+        val encodedSlope_hz_deg = EngineeringNotationTools.encodeMantissa(1 / calcs.phase_slope_deg_hz, DEFAULT_NUM_DP)
         result = encodedSlope_hz_deg.mantissaString + " " + encodedSlope_hz_deg.exponentString + "Hz/deg"
         result_slope_hz_deg.text = result
 
         // epsilon ------------------------------------------------------------------
         //result_epsilon.text = String.format(Locale.US, "%." + mNumDigits + "f (relative)", calcs.epsilon_r)
-        if (epsilonIsMaster) {
-            main_et_vf.setText(String.format(Locale.US, "%.${mNumDigits}f", calcs.velocityFactor))
-        } else {
-            main_et_er.setText(String.format(Locale.US, "%.${mNumDigits}f", calcs.epsilon_r))
-        }
+        main_et_vf.setText(String.format(Locale.US, "%.${DEFAULT_NUM_DP}f", calcs.velocityFactor))
+        main_et_er.setText(String.format(Locale.US, "%.${DEFAULT_NUM_DP}f", calcs.epsilon_r))
 
         // VSWR ripple spacing -------------------------------------------------------
-        val encoded_ripple_hz = EngineeringNotationTools.encodeMantissa(calcs.vswr_ripple_spacing_hz, mNumDigits)
+        val encoded_ripple_hz = EngineeringNotationTools.encodeMantissa(calcs.vswr_ripple_spacing_hz, DEFAULT_NUM_DP)
         result = encoded_ripple_hz.mantissaString + " " + encoded_ripple_hz.exponentString + "Hz spacing"
         result_vswr_ripple.text = result
     }
@@ -285,25 +259,26 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun editTextPostFix(et: EditTextWithClear) {
+        Log.d("MainActivity", "editTextPostFix: ${et.id}")
         hideKeyboard(et)
         et.clearFocus()
         if (et.text.toString().isEmpty()) {
             et.setToDefault()
         }
-        calculateResults()
+        refreshDisplay()
     }
 
     private fun freqSpinnerChanged(id: Long) {
         Log.d(TAG, "freqSpinnerChanged: index = $id")
-        calculateResults()
+        refreshDisplay()
     }
 
     private fun lengthSpinnerChanged(id: Long) {
         Log.d(TAG, "lengthSpinnerChanged: index = $id")
-        calculateResults()
+        refreshDisplay()
     }
 
-    fun hideKeyboard(view: View) {
+    private fun hideKeyboard(view: View) {
         (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(view.windowToken, 0)
     }
 
@@ -316,30 +291,55 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         Log.d(TAG, "onOptionsItemSelected: item = " + item.title.toString())
         when (item.itemId) {
-            R.id.mn_main_settings -> {
-                startActivity(Intent(this@MainActivity, SettingsPrefActivity::class.java))
+            R.id.mn_main_help -> {// startActivity(new Intent(MainActivity.this, HelpActivity.class));
                 return true
             }
-            R.id.mn_main_help ->                 // startActivity(new Intent(MainActivity.this, HelpActivity.class));
+            R.id.mn_preset -> {
+                setEntryToState(getStoredState())
                 return true
+            }
+            R.id.mn_save -> {
+                storeState(capturePresentState())
+                return true
+            }
+            R.id.mn_initialize -> {
+                setEntryToState(EntryState.getDefault())
+            }
             else -> {
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
-    private fun loadPreferences() {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        val numDigitsString = prefs.getString(getString(R.string.pref_key_digits), getString(R.string.pref_def_digits))
-        mNumDigits = numDigitsString!!.toInt()
-        Log.d(TAG, "loadPreferences: nNumDigits set to : $mNumDigits")
+    private var myStoredState: EntryState = EntryState.getDefault()
+
+    private fun getStoredState(): EntryState {
+        return myStoredState
     }
 
-    override fun onResume() {
-        Log.d(TAG, "onResume: entered")
-        loadPreferences()
-        calculateResults()
-        super.onResume()
+    private fun storeState(state: EntryState) {
+        myStoredState = state
+    }
+
+    private fun capturePresentState(): EntryState  {
+        val newState = EntryState()
+        newState.freqString = main_et_freq.text.toString()
+        newState.lengthString = main_et_length.text.toString()
+        newState.lengthSpinnerIndex = length_unit_spinner.getSelectedItemPosition()
+        newState.freqUnitsSpinnerIndex = freq_units_spinner.getSelectedItemPosition()
+        newState.velocityFactorString = main_et_vf.text.toString()
+        return newState
+    }
+
+    private fun setEntryToState(entryState: EntryState) {
+        main_et_freq.setText(entryState.freqString)
+        main_et_length.setText(entryState.lengthString)
+        main_et_vf.setText(entryState.velocityFactorString)
+        epsilonIsMaster = false // use velocityFactor
+        main_et_er.setText("0.4") // set to something
+        freq_units_spinner.setSelection(entryState.freqUnitsSpinnerIndex)
+        length_unit_spinner.setSelection(entryState.lengthSpinnerIndex)
+        refreshDisplay()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -350,7 +350,7 @@ class MainActivity : AppCompatActivity() {
                 val newVf = data!!.getDoubleExtra("VF", 1.0)
                 main_et_vf.setText(newVf.toString())
                 epsilonIsMaster = false
-                calculateResults()
+                refreshDisplay()
             }
         }
     }

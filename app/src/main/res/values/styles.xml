@@ -16,11 +16,10 @@
         <item name="android:padding">4dp</item>
         <item name="android:elevation">4dp</item>
         <item name="android:textColor">@android:color/black</item>
-
+        <item name="android:foreground">?attr/selectableItemBackground</item>
         <item name="android:background">@drawable/shape_button_rounded_white_border</item>
         <item name="android:textAlignment">center</item>
     </style>
-
 
     <style name="MyAppTheme.NoActionBar" parent="AppTheme">
         <item name="windowActionBar">false</item>
@@ -32,7 +31,6 @@
     <style name="MyPopupTheme" parent="Theme.AppCompat.Light">
         <item name="colorAccent">@color/colorPrimaryDark</item>
     </style>
-
 
     <style name="ItemTextAppearance">
         <!--<item name="android:textStyle">normal</item>-->
@@ -53,22 +51,24 @@
         <item name="android:paddingStart">8dp</item>
         <item name="android:paddingEnd">8dp</item>
         <item name="android:paddingTop">2dp</item>
+        <item name="android:textColor">@android:color/black</item>
         <item name="android:paddingBottom">2dp</item>
         <item name="android:layout_width">0dp</item>
     </style>
 
-    <style name="ResultTableVerticalLine">
+    <style name="ResultTableHorizontalLine">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_marginStart">8dp</item>
         <item name="android:layout_marginEnd">8dp</item>
-        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_height">0.2dp</item>
+        <item name="android:elevation">1dp</item>
         <item name="android:background">@color/colorPrimary</item>
     </style>
 
     <style name="ValueTextLabels">
         <item name="android:textColor">@android:color/black</item>
         <item name="android:textSize">16sp</item>
-        <item name="android:textAlignment">center</item>
+        <item name="android:textAlignment">textEnd</item>
 
     </style>
 
