@@ -1,4 +1,4 @@
-package com.sailinghawklabs.lambdaking
+package com.sailinghawklabs.lambdaking.entities
 
 object FreqUnits : LinkedHashMap<Double, String>() {
     val defaultUnit = "MHz"

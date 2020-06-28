@@ -18,25 +18,22 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.RequestConfiguration
 import com.sailinghawklabs.engineeringnotation.EngineeringNotationTools
+import com.sailinghawklabs.lambdaking.entities.*
 import com.sailinghawklabs.lambdaking.tlines.SelectTlineActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar.*
 import kotlinx.android.synthetic.main.include_data_entry.*
-import kotlinx.android.synthetic.main.include_data_entry.freq_units_spinner
-import kotlinx.android.synthetic.main.include_data_entry.length_unit_spinner
-import kotlinx.android.synthetic.main.include_data_entry.main_et_freq
-import kotlinx.android.synthetic.main.include_data_entry.main_et_length
-import kotlinx.android.synthetic.main.include_data_entry.main_et_vf
-import kotlinx.android.synthetic.main.include_data_entry.main_tl_list
 import kotlinx.android.synthetic.main.include_grid_results.*
-import kotlinx.android.synthetic.main.saved_include_data_entry.*
 import java.util.*
+import kotlin.coroutines.CoroutineContext
 
 class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val RESULT_CODE_TLINE_VF = 123
         private const val DEFAULT_NUM_DP = 2
+        private const val ER_VF_NUM_DP = 3
+        private const val PREF_KEY_PRESET_ENTRY = "preset_key"
         private val TAG = MainActivity::class.java.simpleName
     }
 
@@ -98,10 +95,20 @@ class MainActivity : AppCompatActivity() {
         lengthSpinnerAdapter = LinkedHashMapAdapter(this, android.R.layout.simple_spinner_item, LengthUnits)
         lengthSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         length_unit_spinner.adapter = lengthSpinnerAdapter
-
-        val defaultEntryState = EntryState.getDefault()
-        setEntryToState(defaultEntryState)
+        setEntryToState(loadPresetEntryState())
         main_et_er.setAsDefaultValue()
+    }
+
+    private fun loadPresetEntryState(): EntryState {
+        val preferences = getPreferences(Context.MODE_PRIVATE)
+        val defaultState = EntryState.getDefault().serialize()
+        val storedStateString = preferences.getString(PREF_KEY_PRESET_ENTRY, defaultState)
+        return EntryState.create(storedStateString ?: defaultState)
+    }
+
+    private fun storePresetEntryState(state: EntryState) {
+        val preferences = getPreferences(Context.MODE_PRIVATE)
+        preferences.edit().putString(PREF_KEY_PRESET_ENTRY, state.serialize()).apply()
     }
 
     private fun isEntryValid(et: EditText?, fieldName: String): Boolean {
@@ -117,10 +124,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkAllEntries(): Boolean {
-        if (! isEntryValid(main_et_freq, "Frequency")) {
+        if (!isEntryValid(main_et_freq, "Frequency")) {
             return false
         }
-        if (! isEntryValid(main_et_length, "Length")) {
+        if (!isEntryValid(main_et_length, "Length")) {
             return false
         }
         return if (epsilonIsMaster) {
@@ -142,11 +149,13 @@ class MainActivity : AppCompatActivity() {
         numericEntryData.frequency_Hz = (main_et_freq.text.toString()).toDouble()
         numericEntryData.cableLength_m = (main_et_length.text.toString()).toDouble()
 
-        if (! main_et_er.text.isNullOrEmpty()) {
-                numericEntryData.epsilon = (main_et_er.text.toString()).toDouble()
+        if (!main_et_vf.text.isNullOrEmpty()) {
+            numericEntryData.velocityFactor = (Math.max(main_et_vf.text.toString().toDouble(), 0.001))
         }
-        if (! main_et_vf.text.isNullOrEmpty()) {
-            numericEntryData.velocityFactor = (main_et_vf.text.toString()).toDouble()
+
+        if (!main_et_er.text.isNullOrEmpty()) {
+            numericEntryData.epsilon = (Math.max(main_et_er.text.toString().toDouble(), 0.001))
+            numericEntryData.epsilon = (Math.min(numericEntryData.epsilon, 100000.00))
         }
 
         // apply suffix multipliers fron the Spinners
@@ -225,14 +234,30 @@ class MainActivity : AppCompatActivity() {
         result_slope_hz_deg.text = result
 
         // epsilon ------------------------------------------------------------------
-        //result_epsilon.text = String.format(Locale.US, "%." + mNumDigits + "f (relative)", calcs.epsilon_r)
-        main_et_vf.setText(String.format(Locale.US, "%.${DEFAULT_NUM_DP}f", calcs.velocityFactor))
-        main_et_er.setText(String.format(Locale.US, "%.${DEFAULT_NUM_DP}f", calcs.epsilon_r))
+        main_et_vf.setText(String.format(Locale.US, "%.${calcNumDps(calcs.velocityFactor)}f", calcs.velocityFactor))
+        main_et_er.setText(String.format(Locale.US, "%.${calcNumDps(calcs.epsilon_r)}f", calcs.epsilon_r))
 
         // VSWR ripple spacing -------------------------------------------------------
         val encoded_ripple_hz = EngineeringNotationTools.encodeMantissa(calcs.vswr_ripple_spacing_hz, DEFAULT_NUM_DP)
         result = encoded_ripple_hz.mantissaString + " " + encoded_ripple_hz.exponentString + "Hz spacing"
         result_vswr_ripple.text = result
+    }
+
+    fun calcNumDps(value: Double): Int {
+        return when {
+            value < 10 -> {
+                3
+            }
+            value < 100 -> {
+                2
+            }
+            value < 1000 -> {
+                1
+            }
+            else -> {
+                0
+            }
+        }
     }
 
     private val myEditTextOnFocusChangeListener = View.OnFocusChangeListener { v, hasFocus ->
@@ -291,19 +316,23 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         Log.d(TAG, "onOptionsItemSelected: item = " + item.title.toString())
         when (item.itemId) {
-            R.id.mn_main_help -> {// startActivity(new Intent(MainActivity.this, HelpActivity.class));
+            R.id.mn_main_help -> {
+                DialogUtils(this).showHelp()
                 return true
             }
             R.id.mn_preset -> {
-                setEntryToState(getStoredState())
+                setEntryToState(loadPresetEntryState())
                 return true
             }
             R.id.mn_save -> {
-                storeState(capturePresentState())
+                storePresetEntryState(capturePresentState())
                 return true
             }
             R.id.mn_initialize -> {
                 setEntryToState(EntryState.getDefault())
+            }
+            R.id.mn_main_about -> {
+                DialogUtils(this).showAbout()
             }
             else -> {
             }
@@ -311,17 +340,7 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private var myStoredState: EntryState = EntryState.getDefault()
-
-    private fun getStoredState(): EntryState {
-        return myStoredState
-    }
-
-    private fun storeState(state: EntryState) {
-        myStoredState = state
-    }
-
-    private fun capturePresentState(): EntryState  {
+    private fun capturePresentState(): EntryState {
         val newState = EntryState()
         newState.freqString = main_et_freq.text.toString()
         newState.lengthString = main_et_length.text.toString()
@@ -356,10 +375,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun enableAdvertisements() {
-        MobileAds.initialize(this) {
-        }
-        Log.d("MainActivity", "MobileAds initialization returned")
-
         // add physical device(s) as Test Devices for development (not release)
         if (BuildConfig.DEBUG) {
             val config = RequestConfiguration.Builder()
@@ -368,6 +383,8 @@ class MainActivity : AppCompatActivity() {
             MobileAds.setRequestConfiguration(config)
 
         }
+
+        MobileAds.initialize(this)
         val adRequest = AdRequest.Builder().build()
         adView.loadAd(adRequest)
         Log.d("MainActivity", "onCreate: ad id = ${adView.adUnitId}")

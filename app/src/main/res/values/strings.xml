@@ -12,6 +12,11 @@
     <string name="epsilon_hint">Er</string>
     <string name="velocity_factor_hint">Vf</string>
 
+    <string name="asset_about_html">about/about_html.html</string>
+    <string name="asset_help_html">help/help_html.html</string>
+    <string name="about">About</string>
+    <string name="back_button">back button</string>
+
 
     <!--    this is only used in the layout preview - MainActivity creates the real map array -->
     <string-array name="freq_units">

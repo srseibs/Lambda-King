@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+         img {
+            max-width:80%;
+            max-height:60px;
+         }
+		 #eps {
+			font-size: 130%;
+			font-weight: bold;
+		 }
+         em {
+            text-decoration: underline;
+         }
+    </style>
+</head>
+<body>
+
+<h2>Contents</h2>
+<ul>
+    <li><a href="#intro">Quick Instructions</a></li>
+    <ul><li><a href="#pre">Preset, Save and Reset</a></li></ul>
+    <li><a href="#details">Details</a></li>
+	<li><a href="#results">Results Table</a></li>
+	<ul><li><a href="#delay">Delay</a></li></ul>
+	<ul><li><a href="#elen">Electrical Length</a></li></ul>
+	<ul><li><a href="#speed">Speed</a></li></ul>
+	<ul><li><a href="#wave">Wavelength</a></li></ul>
+	<ul><li><a href="#slope">Phase Slopes</a></li></ul>
+	<ul><li><a href="#ripple">VSWR Ripple</a></li></ul>
+	<ul><li><a href="#shift">Phase Shift</a></li></ul>
+</ul>
+
+<h2><a id="intro">Quick Instructions</h2>
+Enter the Frequency, Cable Length, ε<sub>r</sub>, or Velocity Factor into the upper dialog area. The remaining parameters will be immediately recalculated.
+
+<h3><a id="pre">Preset, Save and Reset</h3> As a convenience, you can restore the display to your favorite Preset values or Reset the values to factory default.
+<p>
+<p><em>Preset</em> will restore the displayed values to the custom set of values that you have
+    stored using <em>Save as Preset</em>.
+
+<p><em>Save as Preset</em> will save all of the current settings as the Preset state. These saved values will be set when the app starts up and whenever you select <em>Preset</em>.
+
+<p><em>Reset to Initial Values</em> will all of the values to the original app default settings. 
+
+<! 
+  Online equation editor and source equations:
+  
+  https://www.codecogs.com/latex/eqneditor.php
+   Latin Modern 18pt 110 resolution Transparent Compressed
+  
+  V_{f} = 1 /\sqrt{\varepsilon_{r}}
+  
+  \varepsilon_{r} = 1 /({V_{f})^2}
+  
+  F * \lambda = \upsilon 
+
+!>
+
+<h2><a id="details">Details</h2>
+
+    This app provides a table of useful characteristics for a given signal
+	traveling a given length, on a cable or medium of a given velocity factor. The signal can be any type: optical, radio wave, audio, with the primary difference being the speed at which the wave propagates.
+	<p>This app is primarily exploring the following equation:
+	<p><img src=f_lam_v.png>
+	<p>which states that Frequency times Wavelength equals the Velocity. In free space, the velocity of electomagnetic signals is the speed of light. For sound waves, the velocity is the speed of sound. The actual speed of any signal will depend on the medium in which it propagates. The Wavelength represents the distance in the medium that one cycle occupies.
+	<p>
+	The signal characteristics you can enter are:
+	<ul>
+	<li><b>Frequency</b></li> The rate at which the waveform of the signal repeats, in fundamental units of hertz (Hz), which is equivalent to cycles per second. The suffix button for frequency provides a set of convenient multipliers for easy data entry.
+	
+	<li><b>Cable Length</b></li> The length of the cable or medium traveled. The cable length suffix button provides a set of convenient lengths and multipliers for Imperial and Metric units of length for easy data entry.
+	
+	<li><div id="eps">ε<sub>r</sub></div></li> Epsilon is the relative dielectric constant of the propagation medium or cable. It is a unitless number referring to the ratio to the value of free space dielectric constant (which is often referred to as ε<sub>0</sub>). It is related to the Velocity Factor by the equation:
+	<p>	<img src="er_to_vf.png"/>
+	<p>Changing ε<sub>r</sub> will immediately recalculate the Velocity Factor.
+	
+	<li><b>Velocity Factor</b></li> The velocity factor is the relative speed of the signal in this medium. It is a unitless number that refers to the ratio of the speed to the speed of light in free space. It is related to ε<sub>r</sub> by the equation:
+	<p>	<img src="vf_to_er.png"/>
+	<p>The units button for Velocity Factor will display a table of selected cable types, and approximate values of Velocity Factor. Selecting one of the table rows will populate this field with the selected Velocity Factor.
+	<p>Changing the Velocity Factor will immediately recalculate ε<sub>r</sub>.
+	</ul>
+	
+<h2><a id="results">Results Table</h2>
+Upon entry of any value, the results table will recalculate itself with fresh data, and will autoscale the units to reasonable values for each result.
+<h3><a id="delay">Delay</h3>
+Delay represents the amount of time that the signal takes to propagate the specified Cable Length (or distance) through the medium of the specified ε<sub>r</sub> or Velocity Factor. The units are in seconds (with appropriate suffix multipliers).
+<h3><a id="elen">Electrical Length</h3>
+Electrical Length displays the number of wavelengths contained in the specified Cable Length (or distance)of a specified ε<sub>r</sub> or Velocity Factor. The units are in number of wavelenghts.
+<h3><a id="speed">Speed</h3>
+The velocity (distance/time) and inverse velocity (time/distance) of the signal through the medium of the specified ε<sub>r</sub> or Velocity Factor.
+<h3><a id="wave">Wavelength</h3>
+The results show the wavelength, half-wavelength, and quarter-wavelength of the signal traveling through the medium of the specified ε<sub>r</sub> or Velocity Factor.  
+<h3><a id="slope">Phase Slopes</h3>
+The Phase Slope section displays the <b>change</b> of the phase shift as the length of the cable or the signal frequency changes. It is a handy parameter for looking at sensitivity of a design to frequency drift or jitter, or mechanical changes due to tolerances or thermal expansion. It is displayed in SI and Imperial Units, as well as in length/degree, degree/length and Hz/degree forms.
+<h3><a id="ripple">VSWR Ripple</h3>
+VSWR stands for "Voltage Standing Wave Ratio". At both ends of the Cable Length (or distance) there is likely some reflection due to discontinuity of the impedances. These reflections add and subtract with each other to cause peaks and dips in the voltage that appears on the cable over its length. It is most apparent when measuring input match or S11. This pattern of peaks and dips has a repeating pattern, or "VSWR Ripple" of a certain spacing that is a function of the Velocity Factor, speed of light (c) and the cable length:
+<p><img src=rippleSpacing.png>
+
+<h3><a id="shift">Phase Shift</h3>
+This is the total phase shift of the signal across the Cable Length (or distance) of the medium with the specified ε<sub>r</sub> or Velocity Factor
+
+</body>
+</html>

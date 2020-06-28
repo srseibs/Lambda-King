@@ -1,4 +1,4 @@
-package com.sailinghawklabs.lambdaking
+package com.sailinghawklabs.lambdaking.entities
 
 data class NumericEntryData(
         var valid: Boolean = true,

@@ -2,6 +2,8 @@ package com.sailinghawklabs.lambdaking
 
 import android.util.Log
 import com.sailinghawklabs.engineeringnotation.EngineeringNotationTools
+import com.sailinghawklabs.lambdaking.entities.Characters
+import com.sailinghawklabs.lambdaking.entities.PhysicalConstants
 import java.util.*
 
 class AutoRanger(private var mNumDps: Int = DEFAULT_NUM_DIGITS) {
@@ -31,6 +33,7 @@ class AutoRanger(private var mNumDps: Int = DEFAULT_NUM_DIGITS) {
         val length_mi = length_ft / PhysicalConstants.FEET_PER_MILE_ft
         val length_in = length_ft * 12
         val length_mil = length_ft * 12 * 1000
+        val length_uinch = length_mil * 1000
 
         Log.d("AutoRanger", "rangeLengthImperial: input(m)=$length_m, mi=$length_mi, ft=$length_ft, in=$length_in, mil=$length_mil")
         val units : String
@@ -45,9 +48,12 @@ class AutoRanger(private var mNumDps: Int = DEFAULT_NUM_DIGITS) {
         } else if (length_in > 1) {
             lengthStr = String.format(Locale.US, formatString, length_in)
             units = "in"
-        } else {
+        } else if (length_mil > 1) {
             lengthStr = String.format(Locale.US, formatString, length_mil)
             units = "mil"
+        } else {
+            lengthStr = String.format(Locale.US, formatString, length_uinch)
+            units = Characters.MU + "in"
         }
         return RangedValue(length_ft, lengthStr, units)
     }

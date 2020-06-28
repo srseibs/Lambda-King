@@ -1,4 +1,4 @@
-package com.sailinghawklabs.lambdaking
+package com.sailinghawklabs.lambdaking.entities
 
 object LengthUnits : LinkedHashMap<Double, String>() {
     // populate map with value multipliers to yield m

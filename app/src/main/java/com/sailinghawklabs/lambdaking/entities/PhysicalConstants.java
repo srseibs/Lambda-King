@@ -1,4 +1,4 @@
-package com.sailinghawklabs.lambdaking;
+package com.sailinghawklabs.lambdaking.entities;
 
 public class PhysicalConstants {
     public static final double SPEED_OF_LIGHT_mps = 299792458.0;
