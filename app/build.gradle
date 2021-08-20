@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-
+apply plugin: 'com.google.gms.google-services'
 
 def versionMajor = 0
 def versionMinor = 1
@@ -10,8 +10,15 @@ def versionBuild = 0 // bump for dogfood builds, public betas, etc.
 
 // 0.1.0.0 first version hooked up
 
+
+
+repositories {
+    mavenCentral()
+    google()
+}
+
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
 
     buildFeatures {
         viewBinding = true
@@ -20,7 +27,7 @@ android {
     defaultConfig {
         applicationId "com.sailinghawklabs.lambdaking"
         minSdkVersion 26
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
@@ -49,32 +56,31 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
 
     implementation project(":engineeringnotation")
 
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.browser:browser:1.2.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+
+    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'androidx.browser:browser:1.3.0'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'com.google.android.material:material:1.1.0'
-    implementation 'androidx.media:media:1.1.0'
+    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'androidx.media:media:1.4.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.preference:preference:1.1.1'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
 
-    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.google.code.gson:gson:2.8.7'
 
-    implementation 'com.google.android.gms:play-services-ads:19.1.0'
+    implementation 'com.google.android.gms:play-services-ads:20.2.0'
 
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
-    implementation "androidx.core:core-ktx:1.3.0"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "androidx.core:core-ktx:1.6.0"
 }
 
-apply plugin: 'com.google.gms.google-services'
-repositories {
-    mavenCentral()
-}
+

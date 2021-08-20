@@ -54,6 +54,7 @@ open class DialogUtils(private val context: Context) {
         val dialog: Dialog = builder.create()
         // attach back button
         back.setOnClickListener { dialog.dismiss() }
+        dialog.show()
     }
 
     fun showHelp() {
@@ -62,7 +63,7 @@ open class DialogUtils(private val context: Context) {
         val str = readAssetFile(context.getString(R.string.asset_help_html))
         webView.settings.builtInZoomControls = true
         webView.settings.displayZoomControls = false
-        webView.loadDataWithBaseURL("file:///android_asset/help/", str, "text/html", "UTF-8", null)
+        webView.loadDataWithBaseURL("file:///android_asset/help/", str!!, "text/html", "UTF-8", null)
 
 
         // fill in the title bar

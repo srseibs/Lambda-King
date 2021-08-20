@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity() {
         private const val ER_VF_NUM_DP = 3
         private const val PREF_KEY_PRESET_ENTRY = "preset_key"
         private val TAG = MainActivity::class.java.simpleName
+        private lateinit var presetEntryState: EntryState
     }
 
     private lateinit var freqSpinnerAdapter: LinkedHashMapAdapter<Double, String>
@@ -95,7 +96,9 @@ class MainActivity : AppCompatActivity() {
         lengthSpinnerAdapter = LinkedHashMapAdapter(this, android.R.layout.simple_spinner_item, LengthUnits)
         lengthSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         length_unit_spinner.adapter = lengthSpinnerAdapter
-        setEntryToState(loadPresetEntryState())
+
+        presetEntryState = loadPresetEntryState()
+        setEntryToState(presetEntryState)
         main_et_er.setAsDefaultValue()
     }
 
@@ -139,26 +142,22 @@ class MainActivity : AppCompatActivity() {
 
     private fun readEditTexts(): NumericEntryData {
         Log.d("MainActivity", "readEditTexts: epsilonIsMaster=${epsilonIsMaster}")
-        if (!checkAllEntries()) {
-            Log.d("MainActivity", "readEditTexts: failed checkAllEntries")
-            return NumericEntryData(false)
+        val numericEntryData = NumericEntryData(false)
+
+        if (!isEntryValid(main_et_freq, "Frequency")) {
+            main_et_freq.setText(presetEntryState.freqString)
+            hideKeyboard(main_et_freq)
+            main_et_freq.clearFocus()
         }
-
-        val numericEntryData = NumericEntryData()
-
+        if (!isEntryValid(main_et_length, "Length")) {
+            main_et_length.setText(presetEntryState.lengthString)
+            hideKeyboard(main_et_length)
+            main_et_length.clearFocus()
+        }
         numericEntryData.frequency_Hz = (main_et_freq.text.toString()).toDouble()
         numericEntryData.cableLength_m = (main_et_length.text.toString()).toDouble()
 
-        if (!main_et_vf.text.isNullOrEmpty()) {
-            numericEntryData.velocityFactor = (Math.max(main_et_vf.text.toString().toDouble(), 0.001))
-        }
-
-        if (!main_et_er.text.isNullOrEmpty()) {
-            numericEntryData.epsilon = (Math.max(main_et_er.text.toString().toDouble(), 0.001))
-            numericEntryData.epsilon = (Math.min(numericEntryData.epsilon, 100000.00))
-        }
-
-        // apply suffix multipliers fron the Spinners
+        // apply suffix multipliers from the Spinners
         var position = freq_units_spinner.selectedItemPosition
         val freqMultEntry = freqSpinnerAdapter.getItem(position)
                 ?: throw Exception("MainActivity: readEditTexts: missing freq spinner entry position: $position")
@@ -172,6 +171,17 @@ class MainActivity : AppCompatActivity() {
         numericEntryData.cableLength_m *= lengthMultiplier
         Log.d(TAG, "calculateResults: frequency= " + numericEntryData.frequency_Hz + "Hz, length="
                 + numericEntryData.cableLength_m + "m, Vf = " + numericEntryData.velocityFactor)
+
+        if (!main_et_vf.text.isNullOrEmpty()) {
+            numericEntryData.velocityFactor = (Math.max(main_et_vf.text.toString().toDouble(), 0.001))
+        }
+
+        if (!main_et_er.text.isNullOrEmpty()) {
+            numericEntryData.epsilon = (Math.max(main_et_er.text.toString().toDouble(), 0.001))
+            numericEntryData.epsilon = (Math.min(numericEntryData.epsilon, 100000.00))
+        }
+
+        numericEntryData.valid = true
         return numericEntryData
     }
 
@@ -330,9 +340,11 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.mn_initialize -> {
                 setEntryToState(EntryState.getDefault())
+                return true
             }
             R.id.mn_main_about -> {
                 DialogUtils(this).showAbout()
+                return true
             }
             else -> {
             }
@@ -368,6 +380,10 @@ class MainActivity : AppCompatActivity() {
             if (resultCode == Activity.RESULT_OK) {
                 val newVf = data!!.getDoubleExtra("VF", 1.0)
                 main_et_vf.setText(newVf.toString())
+                hideKeyboard(main_et_vf)
+                main_et_vf.clearFocus()
+                main_et_er.clearFocus()
+                main_et_length.clearFocus()
                 epsilonIsMaster = false
                 refreshDisplay()
             }
