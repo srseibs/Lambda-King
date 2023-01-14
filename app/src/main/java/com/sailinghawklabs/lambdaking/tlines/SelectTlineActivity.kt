@@ -6,6 +6,7 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -31,9 +32,12 @@ class SelectTlineActivity : AppCompatActivity(), TlineSelected {
         itemBinding = activityBinding.selectTlineItem
         setContentView(activityBinding.root)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        itemBinding.tlineVf.text = "Vf"
+
+        registerGoBack()
+
+        itemBinding.tlineVf.text = getString(R.string.velocity_factor_hint)
         itemBinding.tlineVf.typeface = Typeface.DEFAULT_BOLD
-        itemBinding.tlineDescr.text = "Description"
+        itemBinding.tlineDescr.text = getString(R.string.description)
         itemBinding.tlineDescr.typeface = Typeface.DEFAULT_BOLD
         activityBinding.activityTlineRv.setHasFixedSize(true)
         mLayoutManager = LinearLayoutManager(this)
@@ -46,7 +50,10 @@ class SelectTlineActivity : AppCompatActivity(), TlineSelected {
     fun readTlineFile() {
         val inputStream = resources.openRawResource(R.raw.transmission_lines)
         mTlineData = TransLineFile.read(inputStream)
-        Log.d(TAG, "readTlineFile: num entries = " + (mTlineData as MutableList<TransmissionLine>?)!!.size)
+        Log.d(
+            TAG,
+            "readTlineFile: num entries = " + (mTlineData as MutableList<TransmissionLine>?)!!.size
+        )
     }
 
     override fun tlineSelected(tline: TransmissionLine) {
@@ -57,17 +64,21 @@ class SelectTlineActivity : AppCompatActivity(), TlineSelected {
         finish()
     }
 
-    override fun onBackPressed() {
-        Log.d(TAG, "onBackPressed: entered")
-        super.onBackPressed()
+    private fun goBack() {
         val returnIntent = Intent()
         setResult(Activity.RESULT_CANCELED, returnIntent)
         finish()
     }
 
+    private fun registerGoBack() {
+        onBackPressedDispatcher.addCallback(this) {
+            goBack()
+        }
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            android.R.id.home -> onBackPressed()
+            android.R.id.home -> goBack()
         }
         return true
     }

@@ -19,6 +19,7 @@ repositories {
 }
 
 android {
+    namespace = 'com.sailinghawklabs.lambdaking'
     compileSdkVersion 33
 
     buildFeatures {

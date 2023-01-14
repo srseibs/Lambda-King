@@ -22,7 +22,7 @@ class TransLineAdapter(private val mTransmissionLines: List<TransmissionLine>, v
 
         init {
             itemView.setOnClickListener {
-                val transmissionLine = mTransmissionLines[adapterPosition]
+                val transmissionLine = mTransmissionLines[bindingAdapterPosition]
                 mCallback.tlineSelected(transmissionLine)
             }
         }
@@ -30,7 +30,6 @@ class TransLineAdapter(private val mTransmissionLines: List<TransmissionLine>, v
 
     // Create new views (invoked by the layout manager)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val context = parent.context
         val binding = TlineItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
@@ -42,5 +41,4 @@ class TransLineAdapter(private val mTransmissionLines: List<TransmissionLine>, v
     override fun getItemCount(): Int {
         return mTransmissionLines.size
     }
-
 }

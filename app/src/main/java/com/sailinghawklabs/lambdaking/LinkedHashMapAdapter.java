@@ -13,6 +13,7 @@ import android.widget.TextView;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
+@SuppressWarnings("unchecked")
 public class LinkedHashMapAdapter<K, V> extends BaseAdapter implements Filterable {
 
     // When set, filter operates on KEY
@@ -48,7 +49,7 @@ public class LinkedHashMapAdapter<K, V> extends BaseAdapter implements Filterabl
     private int mDropDownResource;
 
     /**
-     * If the inflated resource is not a TextView, {@link #mFieldId} is used to find
+     * If the inflated resource is not a TextView, mFieldId is used to find
      * a TextView inside the inflated views hierarchy. This field must contain the
      * identifier that matches the one defined in the resource file.
      */
@@ -77,42 +78,6 @@ public class LinkedHashMapAdapter<K, V> extends BaseAdapter implements Filterabl
      * Constructor
      *
      * @param context  The current context.
-     * @param resource The resource ID for a layout file containing a TextView to use when
-     *                 instantiating views.
-     */
-    public LinkedHashMapAdapter(Context context, int resource) {
-        init(context, resource, 0, new LinkedHashMap<K, V>(), FLAG_FILTER_ON_KEY);
-    }
-
-    /**
-     * Constructor
-     *
-     * @param context  The current context.
-     * @param resource The resource ID for a layout file containing a TextView to use when
-     *                 instantiating views.
-     * @param flags
-     */
-    public LinkedHashMapAdapter(Context context, int resource, int flags) {
-        init(context, resource, 0, new LinkedHashMap<K, V>(), flags);
-    }
-
-    /**
-     * Constructor
-     *
-     * @param context            The current context.
-     * @param resource           The resource ID for a layout file containing a layout to use when
-     *                           instantiating views.
-     * @param textViewResourceId The id of the TextView within the layout resource to be populated
-     * @param flags
-     */
-    public LinkedHashMapAdapter(Context context, int resource, int textViewResourceId, int flags) {
-        init(context, resource, textViewResourceId, new LinkedHashMap<K, V>(), flags);
-    }
-
-    /**
-     * Constructor
-     *
-     * @param context  The current context.
      * @param resource The resource ID for a layout file containing a layout to use when
      *                 instantiating views.
      * @param mapData  The LinkedHashMap to use as the data source
@@ -120,45 +85,6 @@ public class LinkedHashMapAdapter<K, V> extends BaseAdapter implements Filterabl
     public LinkedHashMapAdapter(Context context, int resource, LinkedHashMap<K, V> mapData) {
         init(context, resource, 0, mapData, FLAG_FILTER_ON_KEY);
     }
-
-    /**
-     * Constructor
-     *
-     * @param context  The current context.
-     * @param resource The resource ID for a layout file containing a layout to use when
-     *                 instantiating views.
-     * @param mapData  The LinkedHashMap to use as the data source
-     * @param flags
-     */
-    public LinkedHashMapAdapter(Context context, int resource, LinkedHashMap<K, V> mapData, int flags) {
-        init(context, resource, 0, mapData, flags);
-    }
-
-    /**
-     * Constructor
-     *
-     * @param context  The current context.
-     * @param resource The resource ID for a layout file containing a layout to use when
-     *                 instantiating views.
-     * @param mapData  The LinkedHashMap to use as the data source
-     */
-    public LinkedHashMapAdapter(Context context, int resource, int textViewResourceId, LinkedHashMap<K, V> mapData) {
-        init(context, resource, textViewResourceId, mapData, FLAG_FILTER_ON_KEY);
-    }
-
-    /**
-     * Constructor
-     *
-     * @param context  The current context.
-     * @param resource The resource ID for a layout file containing a layout to use when
-     *                 instantiating views.
-     * @param mapData  The LinkedHashMap to use as the data source
-     * @param flags
-     */
-    public LinkedHashMapAdapter(Context context, int resource, int textViewResourceId, LinkedHashMap<K, V> mapData, int flags) {
-        init(context, resource, textViewResourceId, mapData, flags);
-    }
-
     private void init(Context context, int resource, int textViewResourceId, LinkedHashMap<K, V> mapData, int flags) {
         mContext = context;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -408,7 +334,7 @@ public class LinkedHashMapAdapter<K, V> extends BaseAdapter implements Filterabl
 
             if (mOriginalMapData == null) {
                 synchronized (mLock) {
-                    mOriginalMapData = new LinkedHashMap<K, V>(mMapData);
+                    mOriginalMapData = new LinkedHashMap<>(mMapData);
                 }
             }
 
@@ -424,7 +350,7 @@ public class LinkedHashMapAdapter<K, V> extends BaseAdapter implements Filterabl
 
                 LinkedHashMap<K, V> values;
                 synchronized (mLock) {
-                    values = new LinkedHashMap<K, V>(mOriginalMapData);
+                    values = new LinkedHashMap<>(mOriginalMapData);
                 }
 
                 final LinkedHashMap<K, V> newValues = new LinkedHashMap<K, V>();
@@ -477,7 +403,7 @@ public class LinkedHashMapAdapter<K, V> extends BaseAdapter implements Filterabl
 
             return results;
         }
-
+        @SuppressWarnings("unchecked")
         @Override
         public CharSequence convertResultToString(Object resultValue) {
             CharSequence result;
@@ -485,9 +411,11 @@ public class LinkedHashMapAdapter<K, V> extends BaseAdapter implements Filterabl
                 result = "";
             }
             if ((mFlags & FLAG_FILTER_RESULT_USE_VALUE) == FLAG_FILTER_RESULT_USE_VALUE) {
-            return ((Entry<String, String>) resultValue).getValue();
+                assert resultValue != null;
+                return ((Entry<String, String>) resultValue).getValue();
         } else {
-            return ((Entry<String, String>) resultValue).getKey();
+                assert resultValue != null;
+                return ((Entry<String, String>) resultValue).getKey();
         }
         }
 
