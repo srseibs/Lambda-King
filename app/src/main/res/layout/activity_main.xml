@@ -33,6 +33,7 @@
 
         <include
             layout="@layout/include_data_entry"
+            android:id="@+id/data_entry"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
     </FrameLayout>
@@ -55,6 +56,7 @@
             android:layout_gravity="center_horizontal">
 
             <include
+                android:id="@+id/resultGrid"
                 layout="@layout/include_grid_results"/>
 
         </LinearLayout>

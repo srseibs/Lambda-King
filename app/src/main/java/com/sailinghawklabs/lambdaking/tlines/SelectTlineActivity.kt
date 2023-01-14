@@ -10,9 +10,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sailinghawklabs.lambdaking.R
+import com.sailinghawklabs.lambdaking.databinding.ActivitySelectTlineBinding
+import com.sailinghawklabs.lambdaking.databinding.TlineItemBinding
 import com.sailinghawklabs.lambdaking.tlines.TransLineAdapter.TlineSelected
-import kotlinx.android.synthetic.main.activity_select_tline.*
-import kotlinx.android.synthetic.main.tline_item.*
 
 
 class SelectTlineActivity : AppCompatActivity(), TlineSelected {
@@ -21,21 +21,26 @@ class SelectTlineActivity : AppCompatActivity(), TlineSelected {
     private lateinit var mLayoutManager: RecyclerView.LayoutManager
     private lateinit var mTlineData: List<TransmissionLine>
 
+    lateinit var activityBinding: ActivitySelectTlineBinding
+    lateinit var itemBinding: TlineItemBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate: entered")
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_select_tline)
+        activityBinding = ActivitySelectTlineBinding.inflate(layoutInflater)
+        itemBinding = activityBinding.selectTlineItem
+        setContentView(activityBinding.root)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        tline_vf.text = "Vf"
-        tline_vf.typeface = Typeface.DEFAULT_BOLD
-        tline_descr.text = "Description"
-        tline_descr.typeface = Typeface.DEFAULT_BOLD
-        activity_tline_rv.setHasFixedSize(true)
+        itemBinding.tlineVf.text = "Vf"
+        itemBinding.tlineVf.typeface = Typeface.DEFAULT_BOLD
+        itemBinding.tlineDescr.text = "Description"
+        itemBinding.tlineDescr.typeface = Typeface.DEFAULT_BOLD
+        activityBinding.activityTlineRv.setHasFixedSize(true)
         mLayoutManager = LinearLayoutManager(this)
-        activity_tline_rv.layoutManager = mLayoutManager
+        activityBinding.activityTlineRv.layoutManager = mLayoutManager
         readTlineFile()
         mAdapter = TransLineAdapter(mTlineData, this)
-        activity_tline_rv.adapter = mAdapter
+        activityBinding.activityTlineRv.adapter = mAdapter
     }
 
     fun readTlineFile() {

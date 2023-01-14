@@ -1,12 +1,9 @@
 package com.sailinghawklabs.lambdaking.tlines
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.sailinghawklabs.lambdaking.R
-import kotlinx.android.synthetic.main.tline_item.view.*
-
+import com.sailinghawklabs.lambdaking.databinding.TlineItemBinding
 
 class TransLineAdapter(private val mTransmissionLines: List<TransmissionLine>, var mCallback: TlineSelected)
     : RecyclerView.Adapter<TransLineAdapter.ViewHolder>() {
@@ -15,12 +12,12 @@ class TransLineAdapter(private val mTransmissionLines: List<TransmissionLine>, v
         fun tlineSelected(tline: TransmissionLine)
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(val binding:TlineItemBinding ) : RecyclerView.ViewHolder(binding.root) {
 
         fun populate(position: Int) {
             val tline = mTransmissionLines[position]
-            itemView.tline_vf.text = tline.velocityFactorString
-            itemView.tline_descr.text = tline.description
+            binding.tlineVf.text = tline.velocityFactorString
+            binding.tlineDescr.text = tline.description
         }
 
         init {
@@ -34,8 +31,8 @@ class TransLineAdapter(private val mTransmissionLines: List<TransmissionLine>, v
     // Create new views (invoked by the layout manager)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val context = parent.context
-        val itemView = LayoutInflater.from(context).inflate(R.layout.tline_item, parent, false)
-        return ViewHolder(itemView)
+        val binding = TlineItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

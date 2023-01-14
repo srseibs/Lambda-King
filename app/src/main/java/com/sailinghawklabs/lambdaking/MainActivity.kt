@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -18,14 +19,12 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.RequestConfiguration
 import com.sailinghawklabs.engineeringnotation.EngineeringNotationTools
+import com.sailinghawklabs.lambdaking.databinding.ActivityMainBinding
+import com.sailinghawklabs.lambdaking.databinding.IncludeDataEntryBinding
+import com.sailinghawklabs.lambdaking.databinding.IncludeGridResultsBinding
 import com.sailinghawklabs.lambdaking.entities.*
 import com.sailinghawklabs.lambdaking.tlines.SelectTlineActivity
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.app_bar.*
-import kotlinx.android.synthetic.main.include_data_entry.*
-import kotlinx.android.synthetic.main.include_grid_results.*
 import java.util.*
-import kotlin.coroutines.CoroutineContext
 
 class MainActivity : AppCompatActivity() {
 
@@ -43,32 +42,41 @@ class MainActivity : AppCompatActivity() {
 
     private var epsilonIsMaster = true
 
+    lateinit var mainBinding: ActivityMainBinding
+    lateinit var dataBinding: IncludeDataEntryBinding
+    lateinit var resultBinding: IncludeGridResultsBinding
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate: entered")
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        setSupportActionBar(toolbar)
+        mainBinding = ActivityMainBinding.inflate(layoutInflater)
+        dataBinding = mainBinding.dataEntry
+        resultBinding = mainBinding.resultGrid
+        setContentView(mainBinding.root)
+        setSupportActionBar(mainBinding.includedToolbar.toolbar)
         supportActionBar!!.title = getString(R.string.app_name)
         initializeViews()
         enableAdvertisements()
+
     }
 
     private fun initializeViews() {
-        main_et_freq.setOnEditorActionListener(myEditorChangeListener)
-        main_et_freq.onFocusChangeListener = myEditTextOnFocusChangeListener
+        dataBinding.mainEtFreq.setOnEditorActionListener(myEditorChangeListener)
+        dataBinding.mainEtFreq.onFocusChangeListener = myEditTextOnFocusChangeListener
 
-        main_et_length.setOnEditorActionListener(myEditorChangeListener)
-        main_et_length.onFocusChangeListener = myEditTextOnFocusChangeListener
+        dataBinding.mainEtLength.setOnEditorActionListener(myEditorChangeListener)
+        dataBinding.mainEtLength.onFocusChangeListener = myEditTextOnFocusChangeListener
 
-        main_et_vf.setOnEditorActionListener(myEditorChangeListener)
-        main_et_vf.onFocusChangeListener = myEditTextOnFocusChangeListener
+        dataBinding.mainEtVf.setOnEditorActionListener(myEditorChangeListener)
+        dataBinding.mainEtVf.onFocusChangeListener = myEditTextOnFocusChangeListener
 
-        main_et_er.setOnEditorActionListener(myEditorChangeListener)
-        main_et_er.onFocusChangeListener = myEditTextOnFocusChangeListener
-        main_et_er.setText("1")
-        main_tv_erLabel.text = Characters.EPSILON_SUB_R
+        dataBinding.mainEtEr.setOnEditorActionListener(myEditorChangeListener)
+        dataBinding.mainEtEr.onFocusChangeListener = myEditTextOnFocusChangeListener
+        dataBinding.mainEtEr.setText("1")
+        dataBinding.mainTvErLabel.text = Characters.EPSILON_SUB_R
 
-        freq_units_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        dataBinding.freqUnitsSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View, position: Int, id: Long) {
                 freqSpinnerChanged(id)
             }
@@ -77,29 +85,29 @@ class MainActivity : AppCompatActivity() {
                 Log.d(TAG, "onNothingSelected: freq spinner")
             }
         }
-        length_unit_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        dataBinding.lengthUnitSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View, position: Int, id: Long) {
                 lengthSpinnerChanged(id)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
-        main_tl_list.setOnClickListener {
+        dataBinding.mainTlList.setOnClickListener {
             val intent = Intent(this, SelectTlineActivity::class.java)
             startActivityForResult(intent, RESULT_CODE_TLINE_VF)
         }
 
         freqSpinnerAdapter = LinkedHashMapAdapter(this, android.R.layout.simple_spinner_item, FreqUnits)
         freqSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        freq_units_spinner.adapter = freqSpinnerAdapter
+        dataBinding.freqUnitsSpinner.adapter = freqSpinnerAdapter
 
         lengthSpinnerAdapter = LinkedHashMapAdapter(this, android.R.layout.simple_spinner_item, LengthUnits)
         lengthSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        length_unit_spinner.adapter = lengthSpinnerAdapter
+        dataBinding.lengthUnitSpinner.adapter = lengthSpinnerAdapter
 
         presetEntryState = loadPresetEntryState()
         setEntryToState(presetEntryState)
-        main_et_er.setAsDefaultValue()
+        dataBinding.mainEtEr.setAsDefaultValue()
     }
 
     private fun loadPresetEntryState(): EntryState {
@@ -127,16 +135,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkAllEntries(): Boolean {
-        if (!isEntryValid(main_et_freq, "Frequency")) {
+        if (!isEntryValid(dataBinding.mainEtFreq, "Frequency")) {
             return false
         }
-        if (!isEntryValid(main_et_length, "Length")) {
+        if (!isEntryValid(dataBinding.mainEtLength, "Length")) {
             return false
         }
         return if (epsilonIsMaster) {
-            isEntryValid(main_et_er, Characters.EPSILON_SUB_R.toString())
+            isEntryValid(dataBinding.mainEtEr, Characters.EPSILON_SUB_R.toString())
         } else {
-            isEntryValid(main_et_vf, "Velocity")
+            isEntryValid(dataBinding.mainEtVf, "Velocity")
         }
     }
 
@@ -144,27 +152,27 @@ class MainActivity : AppCompatActivity() {
         Log.d("MainActivity", "readEditTexts: epsilonIsMaster=${epsilonIsMaster}")
         val numericEntryData = NumericEntryData(false)
 
-        if (!isEntryValid(main_et_freq, "Frequency")) {
-            main_et_freq.setText(presetEntryState.freqString)
-            hideKeyboard(main_et_freq)
-            main_et_freq.clearFocus()
+        if (!isEntryValid(dataBinding.mainEtFreq, "Frequency")) {
+            dataBinding.mainEtFreq.setText(presetEntryState.freqString)
+            hideKeyboard(dataBinding.mainEtFreq)
+            dataBinding.mainEtFreq.clearFocus()
         }
-        if (!isEntryValid(main_et_length, "Length")) {
-            main_et_length.setText(presetEntryState.lengthString)
-            hideKeyboard(main_et_length)
-            main_et_length.clearFocus()
+        if (!isEntryValid(dataBinding.mainEtLength, "Length")) {
+            dataBinding.mainEtLength.setText(presetEntryState.lengthString)
+            hideKeyboard(dataBinding.mainEtLength)
+            dataBinding.mainEtLength.clearFocus()
         }
-        numericEntryData.frequency_Hz = (main_et_freq.text.toString()).toDouble()
-        numericEntryData.cableLength_m = (main_et_length.text.toString()).toDouble()
+        numericEntryData.frequency_Hz = (dataBinding.mainEtFreq.text.toString()).toDouble()
+        numericEntryData.cableLength_m = (dataBinding.mainEtLength.text.toString()).toDouble()
 
         // apply suffix multipliers from the Spinners
-        var position = freq_units_spinner.selectedItemPosition
+        var position = dataBinding.freqUnitsSpinner.selectedItemPosition
         val freqMultEntry = freqSpinnerAdapter.getItem(position)
                 ?: throw Exception("MainActivity: readEditTexts: missing freq spinner entry position: $position")
         val freqMultiplier = freqMultEntry.key
         numericEntryData.frequency_Hz *= freqMultiplier
 
-        position = length_unit_spinner.selectedItemPosition
+        position = dataBinding.lengthUnitSpinner.selectedItemPosition
         val lengthMultEntry = lengthSpinnerAdapter.getItem(position)
                 ?: throw Exception("MainActivity: readEditTexts: missing length spinner entry position: $position")
         val lengthMultiplier = lengthMultEntry.key
@@ -172,12 +180,12 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "calculateResults: frequency= " + numericEntryData.frequency_Hz + "Hz, length="
                 + numericEntryData.cableLength_m + "m, Vf = " + numericEntryData.velocityFactor)
 
-        if (!main_et_vf.text.isNullOrEmpty()) {
-            numericEntryData.velocityFactor = (Math.max(main_et_vf.text.toString().toDouble(), 0.001))
+        if (!dataBinding.mainEtVf.text.isNullOrEmpty()) {
+            numericEntryData.velocityFactor = (Math.max(dataBinding.mainEtVf.text.toString().toDouble(), 0.001))
         }
 
-        if (!main_et_er.text.isNullOrEmpty()) {
-            numericEntryData.epsilon = (Math.max(main_et_er.text.toString().toDouble(), 0.001))
+        if (!dataBinding.mainEtEr.text.isNullOrEmpty()) {
+            numericEntryData.epsilon = (Math.max(dataBinding.mainEtEr.text.toString().toDouble(), 0.001))
             numericEntryData.epsilon = (Math.min(numericEntryData.epsilon, 100000.00))
         }
 
@@ -199,58 +207,58 @@ class MainActivity : AppCompatActivity() {
         // -------------------------------------------------------------------------------------
         // Adjust the units and display results
         // auto-units: *s, *m, ft|in|mi|mil|yd,
-        result_phase_shift_deg.text = autoRanger.rangePhase(calcs.phaseShift_deg).toEngineeringString()
-        result_delay.text = autoRanger.rangeTime(calcs.delay_s).toEngineeringString()
-        result_elen.text = autoRanger.rangeWavelengths(calcs.num_wavelens).toEngineeringString()
+        resultBinding.resultPhaseShiftDeg.text = autoRanger.rangePhase(calcs.phaseShift_deg).toEngineeringString()
+        resultBinding.resultDelay.text = autoRanger.rangeTime(calcs.delay_s).toEngineeringString()
+        resultBinding.resultElen.text = autoRanger.rangeWavelengths(calcs.num_wavelens).toEngineeringString()
 
         // speed --------------------------------------------------------------------
         val encoded_speed_m_s = EngineeringNotationTools.encodeMantissa(calcs.velocity_m_s, DEFAULT_NUM_DP)
         var result = encoded_speed_m_s.mantissaString + " " + encoded_speed_m_s.exponentString + "m/s"
-        result_speed_m_s.text = result
+        resultBinding.resultSpeedMS.text = result
         val encoded_speed_mi_s = EngineeringNotationTools.encodeMantissa(calcs.velocity_mi_s, DEFAULT_NUM_DP)
         result = encoded_speed_mi_s.mantissaString + " " + encoded_speed_m_s.exponentString + "mi/s"
-        result_speed_mi_s.text = result
+        resultBinding.resultSpeedMiS.text = result
         val encoded_speed_s_m = EngineeringNotationTools.encodeMantissa(calcs.velocity_s_m, DEFAULT_NUM_DP)
         result = encoded_speed_s_m.mantissaString + " " + encoded_speed_s_m.exponentString + "s/m"
-        result_speed_s_m.text = result
+        resultBinding.resultSpeedSM.text = result
         val encoded_speed_s_in = EngineeringNotationTools.encodeMantissa(calcs.velocity_s_in, DEFAULT_NUM_DP)
         result = encoded_speed_s_in.mantissaString + " " + encoded_speed_s_in.exponentString + "s/in"
-        result_speed_s_in.text = result
+        resultBinding.resultSpeedSIn.text = result
 
         // lamdas -------------------------------------------------------------
-        result_lambda_m.text = autoRanger.rangeLength(calcs.lambda_m).toEngineeringString()
-        result_lambda_ft.text = autoRanger.rangeLengthImperial(calcs.lambda_m).toEngineeringString()
-        result_lambda_2_m.text = autoRanger.rangeLength(calcs.lambda_m / 2).toEngineeringString()
-        result_lambda_2_ft.text = autoRanger.rangeLengthImperial(calcs.lambda_m / 2).toEngineeringString()
-        result_lambda_4_m.text = autoRanger.rangeLength(calcs.lambda_m / 4).toEngineeringString()
-        result_lambda_4_ft!!.text = autoRanger.rangeLengthImperial(calcs.lambda_m / 4).toEngineeringString()
+        resultBinding.resultLambdaM.text = autoRanger.rangeLength(calcs.lambda_m).toEngineeringString()
+        resultBinding.resultLambdaFt.text = autoRanger.rangeLengthImperial(calcs.lambda_m).toEngineeringString()
+        resultBinding.resultLambda2M.text = autoRanger.rangeLength(calcs.lambda_m / 2).toEngineeringString()
+        resultBinding.resultLambdaFt.text = autoRanger.rangeLengthImperial(calcs.lambda_m / 2).toEngineeringString()
+        resultBinding.resultLambda4M.text = autoRanger.rangeLength(calcs.lambda_m / 4).toEngineeringString()
+        resultBinding.resultLambda4Ft.text = autoRanger.rangeLengthImperial(calcs.lambda_m / 4).toEngineeringString()
 
         // phase slopes --------------------------------------------------
         result = autoRanger.rangeLength(calcs.phase_slope_m_deg).toEngineeringString() + "/deg"
-        result_slope_m_deg.text = result
+        resultBinding.resultSlopeMDeg.text = result
         result = autoRanger.rangeLengthImperial(calcs.phase_slope_m_deg).toEngineeringString() + "/deg"
-        result_slope_ft_deg.text = result
+        resultBinding.resultSlopeFtDeg.text = result
         val encodedSlope_deg_m = EngineeringNotationTools.encodeMantissa(1 / calcs.phase_slope_m_deg, DEFAULT_NUM_DP)
         result = encodedSlope_deg_m.mantissaString + " " + encodedSlope_deg_m.exponentString + "deg/m"
-        result_slope_deg_m.text = result
+        resultBinding.resultSlopeDegM.text = result
         val encodedSlope_deg_ft = EngineeringNotationTools.encodeMantissa(1 / calcs.phase_slope_ft_deg, DEFAULT_NUM_DP)
         result = encodedSlope_deg_ft.mantissaString + " " + encodedSlope_deg_ft.exponentString + "deg/ft"
-        result_slope_deg_ft.text = result
+        resultBinding.resultSlopeDegFt.text = result
         val encodedSlope_deg_hz = EngineeringNotationTools.encodeMantissa(calcs.phase_slope_deg_hz, DEFAULT_NUM_DP)
         result = encodedSlope_deg_hz.mantissaString + " " + encodedSlope_deg_hz.exponentString + "deg/Hz"
-        result_slope_deg_hz.text = result
+        resultBinding.resultSlopeDegHz.text = result
         val encodedSlope_hz_deg = EngineeringNotationTools.encodeMantissa(1 / calcs.phase_slope_deg_hz, DEFAULT_NUM_DP)
         result = encodedSlope_hz_deg.mantissaString + " " + encodedSlope_hz_deg.exponentString + "Hz/deg"
-        result_slope_hz_deg.text = result
+        resultBinding.resultSlopeHzDeg.text = result
 
         // epsilon ------------------------------------------------------------------
-        main_et_vf.setText(String.format(Locale.US, "%.${calcNumDps(calcs.velocityFactor)}f", calcs.velocityFactor))
-        main_et_er.setText(String.format(Locale.US, "%.${calcNumDps(calcs.epsilon_r)}f", calcs.epsilon_r))
+        dataBinding.mainEtVf.setText(String.format(Locale.US, "%.${calcNumDps(calcs.velocityFactor)}f", calcs.velocityFactor))
+        dataBinding.mainEtEr.setText(String.format(Locale.US, "%.${calcNumDps(calcs.epsilon_r)}f", calcs.epsilon_r))
 
         // VSWR ripple spacing -------------------------------------------------------
         val encoded_ripple_hz = EngineeringNotationTools.encodeMantissa(calcs.vswr_ripple_spacing_hz, DEFAULT_NUM_DP)
         result = encoded_ripple_hz.mantissaString + " " + encoded_ripple_hz.exponentString + "Hz spacing"
-        result_vswr_ripple.text = result
+        resultBinding.resultVswrRipple.text = result
     }
 
     fun calcNumDps(value: Double): Int {
@@ -272,9 +280,9 @@ class MainActivity : AppCompatActivity() {
 
     private val myEditTextOnFocusChangeListener = View.OnFocusChangeListener { v, hasFocus ->
         if (!hasFocus) {
-            if (v.id == main_et_er.id) {
+            if (v.id == dataBinding.mainEtEr.id) {
                 epsilonIsMaster = true
-            } else if (v.id == main_et_vf.id) {
+            } else if (v.id == dataBinding.mainEtVf.id) {
                 epsilonIsMaster = false
             }
             editTextPostFix(v as EditTextWithClear)
@@ -282,9 +290,9 @@ class MainActivity : AppCompatActivity() {
     }
     private val myEditorChangeListener = TextView.OnEditorActionListener { v, actionId, _ ->
         if (actionId == EditorInfo.IME_ACTION_DONE) {
-            if (v.id == main_et_er.id) {
+            if (v.id == dataBinding.mainEtEr.id) {
                 epsilonIsMaster = true
-            } else if (v.id == main_et_vf.id) {
+            } else if (v.id == dataBinding.mainEtVf.id) {
                 epsilonIsMaster = false
             }
             editTextPostFix(v as EditTextWithClear)
@@ -354,22 +362,22 @@ class MainActivity : AppCompatActivity() {
 
     private fun capturePresentState(): EntryState {
         val newState = EntryState()
-        newState.freqString = main_et_freq.text.toString()
-        newState.lengthString = main_et_length.text.toString()
-        newState.lengthSpinnerIndex = length_unit_spinner.getSelectedItemPosition()
-        newState.freqUnitsSpinnerIndex = freq_units_spinner.getSelectedItemPosition()
-        newState.velocityFactorString = main_et_vf.text.toString()
+        newState.freqString = dataBinding.mainEtFreq.text.toString()
+        newState.lengthString = dataBinding.mainEtLength.text.toString()
+        newState.lengthSpinnerIndex = dataBinding.lengthUnitSpinner.getSelectedItemPosition()
+        newState.freqUnitsSpinnerIndex = dataBinding.freqUnitsSpinner.getSelectedItemPosition()
+        newState.velocityFactorString = dataBinding.mainEtVf.text.toString()
         return newState
     }
 
     private fun setEntryToState(entryState: EntryState) {
-        main_et_freq.setText(entryState.freqString)
-        main_et_length.setText(entryState.lengthString)
-        main_et_vf.setText(entryState.velocityFactorString)
+        dataBinding.mainEtFreq.setText(entryState.freqString)
+        dataBinding.mainEtLength.setText(entryState.lengthString)
+        dataBinding.mainEtVf.setText(entryState.velocityFactorString)
         epsilonIsMaster = false // use velocityFactor
-        main_et_er.setText("0.4") // set to something
-        freq_units_spinner.setSelection(entryState.freqUnitsSpinnerIndex)
-        length_unit_spinner.setSelection(entryState.lengthSpinnerIndex)
+        dataBinding.mainEtEr.setText("0.4") // set to something
+        dataBinding.freqUnitsSpinner.setSelection(entryState.freqUnitsSpinnerIndex)
+        dataBinding.lengthUnitSpinner.setSelection(entryState.lengthSpinnerIndex)
         refreshDisplay()
     }
 
@@ -379,11 +387,11 @@ class MainActivity : AppCompatActivity() {
         if (requestCode == RESULT_CODE_TLINE_VF) {
             if (resultCode == Activity.RESULT_OK) {
                 val newVf = data!!.getDoubleExtra("VF", 1.0)
-                main_et_vf.setText(newVf.toString())
-                hideKeyboard(main_et_vf)
-                main_et_vf.clearFocus()
-                main_et_er.clearFocus()
-                main_et_length.clearFocus()
+                dataBinding.mainEtVf.setText(newVf.toString())
+                hideKeyboard(dataBinding.mainEtVf)
+                dataBinding.mainEtVf.clearFocus()
+                dataBinding.mainEtEr.clearFocus()
+                dataBinding.mainEtLength.clearFocus()
                 epsilonIsMaster = false
                 refreshDisplay()
             }
@@ -402,7 +410,7 @@ class MainActivity : AppCompatActivity() {
 
         MobileAds.initialize(this)
         val adRequest = AdRequest.Builder().build()
-        adView.loadAd(adRequest)
-        Log.d("MainActivity", "onCreate: ad id = ${adView.adUnitId}")
+        mainBinding.adView.loadAd(adRequest)
+        Log.d("MainActivity", "onCreate: ad id = ${mainBinding.adView.adUnitId}")
     }
 }
