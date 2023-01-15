@@ -453,10 +453,12 @@ class MainActivity : AppCompatActivity() {
         // add physical device(s) as Test Devices for development (not release)
         if (BuildConfig.DEBUG) {
             val config = RequestConfiguration.Builder()
-                .setTestDeviceIds(listOf("28B5489C26A46FD308BFB094FC7F36D8"))
+                // these numbers show as a suggestion in the logCat...
+                .setTestDeviceIds(listOf(
+                    "0DFA42F3B0F7076A1852C880A9787390", // Mike's S21+
+                ))
                 .build()
             MobileAds.setRequestConfiguration(config)
-
         }
 
         MobileAds.initialize(this)

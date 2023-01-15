@@ -47,13 +47,13 @@ android {
         }
 
         release {
-            debuggable true
+            debuggable false
 
             signingConfig signingConfigs.release
 
             // Enables code shrinking, obfuscation, and optimization for only
             // your project's release build type.
-            minifyEnabled false
+            minifyEnabled true
 
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
