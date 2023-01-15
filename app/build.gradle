@@ -5,14 +5,11 @@ apply plugin: 'com.google.gms.google-services'
 def versionMajor = 1
 def versionMinor = 0
 def versionPatch = 1
-def versionBuild = 0 // bump for dogfood builds, public betas, etc.
+def versionBuild = 1 // bump for dogfood builds, public betas, etc.
 
 // 1.0.1.0 added manifest entry for Ads permissions
 // 1.0.0.0 releasing to Play Store
 // 0.1.0.0 first version hooked up
-
-
-
 
 repositories {
     mavenCentral()
@@ -20,6 +17,14 @@ repositories {
 }
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('C:\\Users\\Mike\\Dropbox\\Android\\upload-keystore.jks')
+            storePassword 'hQT0031QeDHF'
+            keyAlias 'upload'
+            keyPassword '9bQhu50V9vOB'
+        }
+    }
     namespace = 'com.sailinghawklabs.lambdaking'
     compileSdkVersion 33
 
@@ -42,11 +47,13 @@ android {
         }
 
         release {
-            debuggable false
+            debuggable true
+
+            signingConfig signingConfigs.release
 
             // Enables code shrinking, obfuscation, and optimization for only
             // your project's release build type.
-            minifyEnabled true
+            minifyEnabled false
 
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

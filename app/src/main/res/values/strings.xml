@@ -1,7 +1,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Lambda King</string>
 
-    <string name="banner_ad_unit_id_PRODUCTION">main_bannerca-app-pub-2187584046682559/3769756520</string>
+
+
+    <string name="banner_ad_unit_id_PRODUCTION">ca-app-pub-2187584046682559~5274409881</string>
     <string name="banner_ad_unit_id_DEMO" tools:ignore="UnusedResources">ca-app-pub-3940256099942544/6300978111</string>
 
     <string name="banner_ad_unit_id">@string/banner_ad_unit_id_PRODUCTION</string>
